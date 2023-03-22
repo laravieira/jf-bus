@@ -32,9 +32,14 @@ const styles = StyleSheet.create({
   bar: {
     height: INPUT_HEIGHT,
     width: '100%',
-    backgroundColor: 'rgba(217, 217, 217, 0.3)',
+    // backgroundColor: 'rgba(217, 217, 217, 0.3)',
+    backgroundColor: '#BFA2B2',
     borderRadius: 24,
-    //TODO Set shadow on input field
+    shadowOffset: { width: 2, height: 4 },
+    shadowRadius: 1,
+    shadowColor: '#000',
+    shadowOpacity: .25,
+    elevation: 5
   },
   input: {
     width: '100%',
