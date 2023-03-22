@@ -1,9 +1,9 @@
 import PageContainer from '../../components/PageContainer';
-import Text from '../../components/Text';
+import Card from '../../components/Card';
 
 function Home() {
   return <PageContainer>
-    <Text>Bla bla bla</Text>
+    <Card />
   </PageContainer>;
 }
 
