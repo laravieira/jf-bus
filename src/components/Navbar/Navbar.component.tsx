@@ -3,6 +3,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Route } from '@react-navigation/native';
 import NavbarIcon from './NavbarIcon.component';
 import NavbarButton from './NavBarButton.component';
+import { NAVBAR_HEIGHT } from './Navbar.config';
 
 function Navbar(props: BottomTabBarProps) {
   function onButtonPress(route: Route<any>, hasFocus: boolean) {
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   navbar: {
     display: 'flex',
     flexDirection: 'row',
-    height: 64,
+    height: NAVBAR_HEIGHT,
     width: '100%',
     backgroundColor: '#D9BACB'
   }

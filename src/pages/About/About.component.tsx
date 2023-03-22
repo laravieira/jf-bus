@@ -10,7 +10,7 @@ const LINK_BILHETEUNICO = 'http://www.bilheteunicojf.com.br';
 const LINK_TOWNHALL = 'https://www.pjf.mg.gov.br/onibus/itinerario/';
 
 function About() {
-  return <PageContainer>
+  return <PageContainer.Scroll>
     <Text.H3>JF Bus</Text.H3>
     <Line style={ styles.line }/>
     <Text style={ styles.text }>JF Bus is a non official application, open-source, non-profitable, made and maintained by <Text.Link url={ LINK_LARAVIEIRA }>Lara Vieira</Text.Link>.</Text>
@@ -30,7 +30,7 @@ function About() {
     <Text.Link url={ LINK_BILHETEUNICO }>{ LINK_BILHETEUNICO }</Text.Link>
     <Text style={ styles.text }>Horário de ônibus:</Text>
     <Text.Link url={ LINK_TOWNHALL }>{ LINK_TOWNHALL }</Text.Link>
-  </PageContainer>;
+  </PageContainer.Scroll>;
 }
 
 const styles = StyleSheet.create({
