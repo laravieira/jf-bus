@@ -1,5 +1,5 @@
-import { Text } from 'react-native';
 import PageContainer from '../../components/PageContainer';
+import Text from '../../components/Text';
 
 function Schedule() {
   return <PageContainer>
