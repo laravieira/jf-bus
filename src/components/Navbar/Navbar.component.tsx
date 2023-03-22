@@ -1,27 +1,17 @@
 import { StyleSheet, View } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Route } from '@react-navigation/native';
-import NavbarIcon from './NavbarIcon.component';
-import NavbarButton from './NavBarButton.component';
 import { NAVBAR_HEIGHT } from './Navbar.config';
+import Navbar from './index';
 
-function Navbar(props: BottomTabBarProps) {
-  function onButtonPress(route: Route<any>, hasFocus: boolean) {
-    const { navigation } = props;
-    const { key } = route;
+type NavbarComponentProps = {
+  onButtonPress: (route: Route<any>, hasFocus: boolean) => void,
+  show: boolean
+} & BottomTabBarProps;
 
-    const pressEvent = navigation.emit({
-      type: 'tabPress',
-      target: key,
-      canPreventDefault: true
-    });
-
-    if(!hasFocus && !pressEvent.defaultPrevented)
-      navigation.navigate({ key, merge:true });
-  }
-
+function NavbarComponent(props: NavbarComponentProps) {
   function renderButton(route: Route<any>, key: number) {
-    const { state: { index }, descriptors } = props;
+    const { state: { index }, descriptors, onButtonPress } = props;
     const {
       options: {
         tabBarAccessibilityLabel,
@@ -51,7 +41,7 @@ function Navbar(props: BottomTabBarProps) {
     return routes.map(renderButton);
   }
 
-  return <View style={styles.navbar}>
+  return <View style={ props.show ? styles.navbar : { display: 'none' } }>
     { renderButtons() }
   </View>;
 }
@@ -66,7 +56,4 @@ const styles = StyleSheet.create({
   }
 });
 
-Navbar.Icon = NavbarIcon;
-Navbar.Button = NavbarButton;
-
-export default Navbar;
+export default NavbarComponent;
