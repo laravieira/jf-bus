@@ -12,21 +12,24 @@ import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { userLogin } from '../../slices/user.slice';
 
 function Login() {
-  const { logged, loading } = useAppSelector(state => state.user);
+  const { logged, loading, user } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
 
-  const [user, setUser] = useState<string>('');
+  const [document, setUser] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [keep, setKeep] = useState<boolean>(true);
 
   useEffect(() => {
-    if(!logged)
+    if(loading)
+      return;
+    if(!logged && !user)
       dispatch(userLogin({}))
-    console.debug('loading: ', loading, ', logged: ', logged);
+    if(!logged && user)
+      alert('Did u type something wrong?');
   }, [logged, loading]);
 
   function onLogin() {
-    dispatch(userLogin({user, password, keep}));
+    dispatch(userLogin({user: document, password, keep}));
   }
   
   return <PageContainer>
@@ -34,7 +37,7 @@ function Login() {
     <Line style={styles.smallSpace}/>
 
     <Text.H5 style={styles.largeSpace}>CPF</Text.H5>
-    <InputField style={styles.smallSpace} onType={setUser} value={user} placeholder="123.456.789-01"/>
+    <InputField style={styles.smallSpace} onType={setUser} value={document} placeholder="123.456.789-01"/>
     <Text.H5 style={styles.largeSpace}>Password</Text.H5>
     <InputField style={styles.smallSpace} onType={setPassword} value={password} placeholder="********" secureTextEntry={true} />
     <View style={[styles.small, styles.largeSpace]}>

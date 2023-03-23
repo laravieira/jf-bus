@@ -28,7 +28,6 @@ export const userLogin = createAsyncThunk('user/login', (
   const { user, password, keep } = login;
   const { user: { logged } } = getState() as RootState;
 
-
   if(logged)
     return Promise.reject();
   return User.login(user, password, keep);

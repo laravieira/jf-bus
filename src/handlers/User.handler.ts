@@ -76,7 +76,12 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
       });
 
       if(!logged)
-        return Promise.reject();
+        return {
+          loading: false,
+          session,
+          logged,
+          user
+        } as UserType;
 
       keep && saveUser(user, password);
 
