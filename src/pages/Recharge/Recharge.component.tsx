@@ -4,9 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import { ROUTE_LOGIN } from '../../constants';
+import { userLogin } from '../../slices/user.slice';
+import useAppDispatch from '../../hooks/useAppDispatch.hook';
 
 function Recharge() {
-  const { logged } = useAppSelector(state => state.user);
+  const { logged, loading, autoLogged } = useAppSelector(state => state.user);
+  const dispatch = useAppDispatch();
   const { navigate, addListener, removeListener } = useNavigation();
 
   useEffect(() => {
@@ -15,10 +18,15 @@ function Recharge() {
     return () => removeListener('focus', onPageFocus);
   }, []);
 
-  function onPageFocus() {
-    if(!logged)
+  useEffect(() => {
+    if(!loading && !logged && autoLogged)
       // @ts-ignore
       navigate({ name: ROUTE_LOGIN });
+  }, [logged, loading]);
+
+  function onPageFocus() {
+    if(!loading && !logged && !autoLogged)
+      dispatch(userLogin({}))
   }
 
   return <PageContainer>

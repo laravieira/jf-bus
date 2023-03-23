@@ -6,7 +6,8 @@ const initialState: UserType = {
   logged: false,
   loading: false,
   session: null,
-  user: null
+  user: null,
+  autoLogged: false
 }
 
 const user = createSlice({
@@ -47,7 +48,8 @@ export const userLogout = createAsyncThunk('user/logout', (
       logged: false,
       loading: false,
       session: null,
-      user: null
+      user: null,
+      autoLogged: true
     }));
 })
 

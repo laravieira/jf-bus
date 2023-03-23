@@ -2,8 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
 import { IconProps } from '../components/Navbar/NavbarIcon.component';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ROUTE_DEFAULT, SCREENS } from './Navigation.config';
+import { SCREENS } from './Navigation.config';
 import SearchBar from '../components/SearchBar';
+import { ROUTE_DEFAULT } from '../constants';
 
 const Tab = createBottomTabNavigator();
 

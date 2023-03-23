@@ -5,28 +5,42 @@ import InputField from '../../components/InputField';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import CheckField from '../../components/CheckField';
-import { BU_HOST, BU_PATH_PASSWORD } from '../../constants';
+import { BU_HOST, BU_PATH_PASSWORD, ROUTE_RECHARGE } from '../../constants';
 import Button from '../../components/Button';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { userLogin } from '../../slices/user.slice';
+import { useNavigation } from '@react-navigation/native';
 
 function Login() {
-  const { logged, loading, user } = useAppSelector(state => state.user);
+  const { logged, loading, user, autoLogged } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
+  const { navigate, addListener, removeListener } = useNavigation();
 
   const [document, setUser] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [keep, setKeep] = useState<boolean>(true);
 
   useEffect(() => {
+    addListener('focus', onPageFocus);
+
+    return () => removeListener('focus', onPageFocus);
+  }, []);
+
+  useEffect(() => {
     if(loading)
       return;
-    if(!logged && !user)
-      dispatch(userLogin({}))
-    if(!logged && user)
+    if(!logged && user && !autoLogged)
       alert('Did u type something wrong?');
+    if(logged)
+      // @ts-ignore
+      navigate({ name: ROUTE_RECHARGE })
   }, [logged, loading]);
+
+  function onPageFocus() {
+    if(!loading && !logged && !autoLogged)
+      dispatch(userLogin({}))
+  }
 
   function onLogin() {
     dispatch(userLogin({user: document, password, keep}));

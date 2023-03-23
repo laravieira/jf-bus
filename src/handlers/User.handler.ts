@@ -19,7 +19,8 @@ export type UserType = {
   logged: boolean,
   loading: boolean,
   session: string|null,
-  user: string|null
+  user: string|null,
+  autoLogged: boolean
 };
 
 function saveUser(user: string, password: string): void {
@@ -80,7 +81,8 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
           loading: false,
           session,
           logged,
-          user
+          user,
+          autoLogged: typeof keep === 'undefined'
         } as UserType;
 
       keep && saveUser(user, password);
@@ -89,7 +91,8 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
         loading: false,
         session,
         logged,
-        user
+        user,
+        autoLogged: typeof keep === 'undefined'
       } as UserType;
     });
 }
