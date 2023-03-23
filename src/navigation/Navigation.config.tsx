@@ -7,6 +7,14 @@ import Login from '../pages/Login';
 import { AtSymbolIcon, ClockIcon, CreditCardIcon, HeartIcon, HomeIcon, UserIcon } from 'react-native-heroicons/outline';
 import { IconProps } from '../components/Navbar/NavbarIcon.component';
 import Schedule from '../pages/Schedule';
+import {
+  ROUTE_ABOUT,
+  ROUTE_FAVORITES, ROUTE_HOME,
+  ROUTE_LOGIN,
+  ROUTE_RECHARGE,
+  ROUTE_SCHEDULE,
+  ROUTE_SCHEDULES
+} from '../constants';
 
 type Screen = {
   name: string,
@@ -16,14 +24,7 @@ type Screen = {
   visible: boolean
 }
 
-export const ROUTE_FAVORITES = 'favorites';
-export const ROUTE_SCHEDULES = 'schedules';
-export const ROUTE_HOME      = 'home';
-export const ROUTE_RECHARGE  = 'recharge';
-export const ROUTE_ABOUT     = 'about';
-export const ROUTE_LOGIN     = 'login';
-export const ROUTE_SCHEDULE  = 'schedule';
-export const ROUTE_DEFAULT   = ROUTE_HOME;
+
 
 export const SCREENS: Screen[] = [
   {

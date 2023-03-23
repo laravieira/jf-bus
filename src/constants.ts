@@ -8,3 +8,13 @@ export const BU_STORE_PASSWORD = 'password';
 
 export const BU_PATH_LOGIN = 'Login_Async.aspx';
 export const BU_PATH_LOGOUT = 'Pages/wfm_LogOff.aspx';
+export const BU_PATH_PASSWORD = 'wfm_Confirm_Pass.aspx';
+
+export const ROUTE_FAVORITES = 'favorites';
+export const ROUTE_SCHEDULES = 'schedules';
+export const ROUTE_HOME      = 'home';
+export const ROUTE_RECHARGE  = 'recharge';
+export const ROUTE_ABOUT     = 'about';
+export const ROUTE_LOGIN     = 'login';
+export const ROUTE_SCHEDULE  = 'schedule';
+export const ROUTE_DEFAULT   = ROUTE_HOME;

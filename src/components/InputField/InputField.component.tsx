@@ -1,13 +1,12 @@
-import { StyleSheet, TextInput, View, ViewProps } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { INPUT_HEIGHT } from './InputField.config';
 
 type InputFieldProps = {
   onType: (value: string) => void,
   onClear?: () => void,
-  value: string,
-  placeholder?: string
-} & ViewProps;
+  value: string
+} & TextInputProps;
 
 function InputField(props: InputFieldProps) {
   const { value, onType, onClear, style, placeholder } = props;
@@ -16,15 +15,15 @@ function InputField(props: InputFieldProps) {
     <TextInput
       placeholder={placeholder}
       placeholderTextColor="rgba(255 255 255 / .8)"
-      value={value}
       onChangeText={onType}
+      { ...props }
       style={styles.input}
     />
     <XMarkIcon
       size={32}
       color="rgba(255 255 255 / .6)"
       style={ value.length ? styles.clear : { display: 'none' }}
-      onPress={onClear}/>
+      onPress={() => onClear ? onClear() : onType('')}/>
   </View>;
 }
 

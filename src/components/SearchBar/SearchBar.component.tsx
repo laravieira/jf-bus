@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ROUTE_SCHEDULES } from '../../navigation/Navigation.config';
+import { ROUTE_SCHEDULES } from '../../constants';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import { useDispatch } from 'react-redux';
 import { setSearch } from '../../slices/search.slice';

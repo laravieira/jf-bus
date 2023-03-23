@@ -1,6 +1,4 @@
 import { getItemAsync, setItemAsync, deleteItemAsync } from 'expo-secure-store';
-import useAppDispatch from '../hooks/useAppDispatch.hook';
-import { setUser, setUserLoading } from '../slices/user.slice';
 import {
   BU_COOKIE_LOGGED,
   BU_COOKIE_SESSION,
@@ -16,6 +14,13 @@ export type Login = {
   password: string,
   keep?: boolean
 }
+
+export type UserType = {
+  logged: boolean,
+  loading: boolean,
+  session: string|null,
+  user: string|null
+};
 
 function saveUser(user: string, password: string): void {
   Promise.all([
@@ -45,16 +50,14 @@ function restoreUser(): Promise<Login> {
   });
 }
 
-function loginUser(user: string, password: string, keep?: boolean): void {
-  const dispatch = useAppDispatch();
-  dispatch(setUserLoading(true));
-
+function loginUser(user: string, password: string, keep?: boolean): Promise<UserType> {
   const query = new URLSearchParams({
     doc: user,
     pass: password
   });
 
-  fetch(`${BU_HOST}${BU_PATH_LOGIN}?${query}`)
+
+  return fetch(`${BU_HOST}${BU_PATH_LOGIN}?${query}`)
     .then(response => {
       if(!response.ok)
         return Promise.reject();
@@ -72,41 +75,31 @@ function loginUser(user: string, password: string, keep?: boolean): void {
           logged = true;
       });
 
-      if(!logged || !session)
+      if(!logged)
         return Promise.reject();
 
-      dispatch(setUser({
+      keep && saveUser(user, password);
+
+      return {
         loading: false,
         session,
         logged,
         user
-      }))
-    })
-    .then(() => keep && saveUser(user, password))
-    .catch(() => dispatch(setUserLoading(false)))
+      } as UserType;
+    });
 }
 
-function logoutUser(): void {
-  const dispatch = useAppDispatch();
-
-  fetch(`${BU_HOST}${BU_PATH_LOGOUT}`)
+function logoutUser(): Promise<void> {
+  return fetch(`${BU_HOST}${BU_PATH_LOGOUT}`)
     .then(unsaveUser)
-    .catch()
-    .finally(() => dispatch(setUser({
-      logged: false,
-      loading: false,
-      session: null,
-      user: null
-    })));
 }
 
-function login(user?: string, password?: string, keep?: boolean): void {
+function login(user?: string, password?: string, keep?: boolean): Promise<UserType> {
   if(user && password)
-    loginUser(user, password, keep);
+    return loginUser(user, password, keep);
   else
-    restoreUser()
-      .then(({ user, password }) => loginUser(user, password, keep))
-      .catch();
+    return restoreUser()
+      .then(({ user, password }) => loginUser(user, password, keep));
 }
 
 const User = {
