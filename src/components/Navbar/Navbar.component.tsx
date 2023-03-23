@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Route } from '@react-navigation/native';
 import { NAVBAR_HEIGHT } from './Navbar.config';
-import Navbar from './index';
+import NavbarButton from './NavBarButton.component';
 
 type NavbarComponentProps = {
   onButtonPress: (route: Route<any>, hasFocus: boolean) => void,
@@ -25,7 +25,7 @@ function NavbarComponent(props: NavbarComponentProps) {
 
     if(typeof tabBarButton !== 'undefined')
       return null;
-    return <Navbar.Button
+    return <NavbarButton
       hasFocus={hasFocus}
       label={tabBarAccessibilityLabel}
       id={tabBarTestID}

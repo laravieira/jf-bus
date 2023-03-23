@@ -16,12 +16,9 @@ const search = createSlice({
   reducers: {
     setSearch: (state: SearchState, action: PayloadAction<string>) => {
       state.value = action.payload
-    },
-    setFocus: (state: SearchState, action: PayloadAction<boolean>) => {
-      state.focus = action.payload
     }
   },
 });
 
-export const { setSearch, setFocus } = search.actions;
+export const { setSearch } = search.actions;
 export default search.reducer;
