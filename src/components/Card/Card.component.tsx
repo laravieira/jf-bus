@@ -1,29 +1,48 @@
 import { Image, StyleSheet, View } from 'react-native';
 import BilheteUnico from '../../../assets/bilhete-unico-logo.png';
 import Text from '../Text';
-import IconButton from '../IconButton';
-import { BanknotesIcon } from 'react-native-heroicons/outline';
+import CircleButton from '../CircleButton';
+import { BanknotesIcon, LockClosedIcon, LockOpenIcon } from 'react-native-heroicons/outline';
+import CardEmpty from './CardEmpty.component';
+import { IconProps } from '../Navbar/NavbarIcon.component';
 
 type CardData = {
   user: string,
   type: number,
-  code: string
+  code: string,
+  active: boolean
 };
 
-function Card() {
-  const card: CardData = {
-    user: 'Lara Vieira de Menezes',
-    type: 231,
-    code: '59.20.00021735-2'
-  };
+type CardProps = {
+  data: CardData,
+  showLock?: boolean
+};
+
+function Card(props: CardProps) {
+  const {
+    data: {
+      user,
+      code,
+      active
+    }, showLock
+  } = props;
+
+  function renderButton(icon: (props: IconProps) => JSX.Element) {
+    return <CircleButton>{ icon }</CircleButton>;
+  }
+
+  function renderButtons() {
+    return <View style={styles.buttons}>
+      { showLock ? renderButton(active ? LockClosedIcon : LockOpenIcon) : null }
+      { renderButton(BanknotesIcon) }
+    </View>;
+  }
 
   return <View style={styles.card}>
     <Image source={BilheteUnico} style={styles.image}/>
-    <Text.H6>{ card.user }</Text.H6>
-    <Text.H6>{ card.code }</Text.H6>
-    <IconButton>
-      { BanknotesIcon }
-    </IconButton>
+    <Text.H6>{ user }</Text.H6>
+    <Text.H6>{ code }</Text.H6>
+    { renderButtons() }
   </View>;
 }
 
@@ -44,7 +63,15 @@ const styles = StyleSheet.create({
   image: {
     width: '67.2%',
     borderWidth: 1
+  },
+  buttons: {
+    position: 'absolute',
+    bottom: 20,
+    right: 24,
+    gap: 16
   }
 });
+
+Card.Empty = CardEmpty;
 
 export default Card;
