@@ -9,7 +9,7 @@ import {
   BU_STORE_PASSWORD,
   BU_STORE_USER
 } from '../constants';
-import axios from 'axios';
+import useAxios from '../hooks/useAxios.hook';
 
 export type Login = {
   user: string,
@@ -59,11 +59,11 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
     pass: password
   });
 
-  return axios.get(`${BU_HOST}${BU_PATH_LOGIN}?${query}`, { withCredentials: true })
+  return useAxios().get(`${BU_PATH_LOGIN}?${query}`)
     .then(response => {
       if(response.status > 299)
         return Promise.reject();
-      return response.config.url ?? '';
+      return response.request.responseURL ?? '';
     })
     .then(CookieManager.get)
     .then((cookies: Cookies) => {
@@ -86,7 +86,7 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
 function logoutUser(): Promise<void> {
   return CookieManager.clearAll()
     .then(unsaveUser)
-    .then(() => axios.get(`${BU_HOST}${BU_PATH_LOGOUT}`))
+    .then(() => useAxios().get(`${BU_HOST}${BU_PATH_LOGOUT}`))
 }
 
 function login(user?: string, password?: string, keep?: boolean): Promise<UserType> {
