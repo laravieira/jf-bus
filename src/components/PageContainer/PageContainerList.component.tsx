@@ -1,6 +1,7 @@
 import { FlatList, FlatListProps, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HEADER_HEIGHT } from '../SearchBar/SearchBar.config';
+import { PAGE_HORIZONTAL_PADDING } from './PageContainer.config';
 
 function PageContainerList<T>(props: FlatListProps<T>) {
   const { style, ListFooterComponent, ListFooterComponentStyle } = props;
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   container: {
-    paddingHorizontal: 16,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING,
     paddingTop: 32
   },
   footer: {

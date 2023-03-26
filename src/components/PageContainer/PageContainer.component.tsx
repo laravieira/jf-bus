@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { HEADER_HEIGHT } from '../SearchBar/SearchBar.config';
 import PageContainerScroll from './PageContainerScroll.component';
 import PageContainerList from './PageContainerList.component';
+import { PAGE_HORIZONTAL_PADDING } from './PageContainer.config';
 
 function PageContainer(props: PropsWithChildren) {
   return <SafeAreaView style={styles.container}>
@@ -14,7 +15,7 @@ function PageContainer(props: PropsWithChildren) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: HEADER_HEIGHT + 32,
-    paddingHorizontal: 16,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING,
   }
 });
 

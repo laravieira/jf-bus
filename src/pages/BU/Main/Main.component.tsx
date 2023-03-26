@@ -1,78 +1,61 @@
 import PageContainer from '../../../components/PageContainer';
 import Text from '../../../components/Text';
-import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
-import useAppSelector from '../../../hooks/useAppSelector.hook';
-import { ROUTE_BU_LOGIN } from '../../../constants';
-import { userLogin, userLogout } from '../../../slices/user.slice';
-import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 import Line from '../../../components/Line';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Card from '../../../components/Card';
-import Owners from '../../../handlers/Owners.handler';
-import Button from '../../../components/Button';
+import Menu from '../../../components/Menu';
+import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
+import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 'react-native-heroicons/outline';
 
-function Main() {
-  const { logged, loading, autoLogged, session } = useAppSelector(state => state.user);
-  const dispatch = useAppDispatch();
-  const { navigate, addListener, removeListener } = useNavigation();
-  const card = {
-    user: 'Lara Vieira de Menezes',
-    type: 231,
-    code: '59.20.00021735-2',
-    active: true
-  };
-  useEffect(() => {
-    addListener('focus', onPageFocus);
+type MainComponentProps = {
+  card: any //TODO Add proper type to this card,
+  onPageAccount: () => void,
+  onPageRecharges: () => void,
+  onPageCards: () => void,
+  onLogout: () => void
+};
 
-    return () => removeListener('focus', onPageFocus);
-  }, []);
+function MainComponent(props: MainComponentProps) {
+  const {
+    card,
+    onPageAccount,
+    onPageRecharges,
+    onPageCards,
+    onLogout
+  } = props;
 
-  useEffect(() => {
-    if(!logged && !loading && !autoLogged)
-      dispatch(userLogin({}))
-    if(!logged && !loading && autoLogged)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
-  }, [loading, logged]);
-
-  function onPageFocus() {
-    if(!logged && !loading && !autoLogged)
-      dispatch(userLogin({}))
-    if(!logged && !loading && autoLogged)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
+  function renderMenu() {
+    return <Menu>
+      <Menu.Button icon={UserIcon} onPress={onPageAccount}>Account</Menu.Button>
+      <Menu.Button icon={NewspaperIcon} onPress={onPageRecharges}>Recharges</Menu.Button>
+      <Menu.Button icon={CreditCardIcon} onPress={onPageCards}>Cards</Menu.Button>
+      <Menu.Button icon={ArrowUturnRightIcon} onPress={onLogout}>Logout</Menu.Button>
+    </Menu>;
   }
 
-  function onOwners() {
-    console.debug('Session:', session);
-    Owners(session ?? '')
-      .then(data => console.debug('Valid return:', data))
-      .catch(console.warn)
-  }
-
-  function onLogout() {
-    dispatch(userLogout());
-    console.debug('onLogout', !logged, !loading, autoLogged);
-  }
-
-  return <PageContainer.Scroll>
-    <Text.H3>Bilhete Único</Text.H3>
-    <Line style={styles.smallSpace}/>
-    <Card style={styles.mediumSpace} data={card} showLock/>
-    <Text.H3 style={styles.largeSpace}>Last Recharges</Text.H3>
-    <Line style={styles.smallSpace}/>
-    <Button onPress={onOwners} style={styles.smallSpace}>Owners</Button>
-    <Button onPress={onLogout} style={styles.smallSpace}>Logout</Button>
+  return <PageContainer.Scroll style={styles.container}>
+    { renderMenu() }
+    <View style={styles.content}>
+      <Card style={styles.mediumSpace} data={card} showLock/>
+      <Text.H3 style={styles.largeSpace}>Last Recharges</Text.H3>
+      <Line style={styles.smallSpace}/>
+      {/* TODO Implement last rechages on the BU Main page */}
+    </View>
   </PageContainer.Scroll>;
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 0
+  },
+  content: {
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING
+  },
   largeSpace: {
     marginTop: 32
   },
   mediumSpace: {
-    marginTop: 24
+    marginTop: 24,
   },
   smallSpace: {
     marginTop: 8
@@ -83,4 +66,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main;
+export default MainComponent;
