@@ -83,10 +83,10 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
     });
 }
 
-function logoutUser(): Promise<void> {
+function logoutUser(session: string): Promise<void> {
   return CookieManager.clearAll()
     .then(unsaveUser)
-    .then(() => useAxios().get(`${BU_HOST}${BU_PATH_LOGOUT}`))
+    .then(() => useAxios(session).get(`${BU_HOST}${BU_PATH_LOGOUT}`))
 }
 
 function login(user?: string, password?: string, keep?: boolean): Promise<UserType> {

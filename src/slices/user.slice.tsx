@@ -47,11 +47,11 @@ export const userLogout = createAsyncThunk('user/logout', (
   ignore,
   { getState }
 ): Promise<any> => {
-  const { user: state } = getState() as RootState;
+  const { user: { logged, session } } = getState() as RootState;
 
-  if(!state.logged)
+  if(!logged)
     return Promise.reject();
-  return User.logout()
+  return User.logout(session ?? '')
     .then(Promise.reject)
 })
 
