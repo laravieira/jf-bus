@@ -1,4 +1,5 @@
 import { getItemAsync, setItemAsync, deleteItemAsync } from 'expo-secure-store';
+import CookieManager, { Cookies } from '@react-native-cookies/cookies';
 import {
   BU_COOKIE_LOGGED,
   BU_COOKIE_SESSION,
@@ -8,6 +9,7 @@ import {
   BU_STORE_PASSWORD,
   BU_STORE_USER
 } from '../constants';
+import axios from 'axios';
 
 export type Login = {
   user: string,
@@ -57,35 +59,19 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
     pass: password
   });
 
-
-  return fetch(`${BU_HOST}${BU_PATH_LOGIN}?${query}`)
+  return axios.get(`${BU_HOST}${BU_PATH_LOGIN}?${query}`, { withCredentials: true })
     .then(response => {
-      if(!response.ok)
+      if(response.status > 299)
         return Promise.reject();
+      return response.config.url ?? '';
+    })
+    .then(CookieManager.get)
+    .then((cookies: Cookies) => {
+      const session: string|null = cookies[BU_COOKIE_SESSION].value ?? null;
+      const logged: boolean = cookies[BU_COOKIE_LOGGED].value === user;
 
-      // Set session and if user is logged in
-      let session: string|null = null;
-      let logged: boolean = false;
-      response.headers.forEach((value:string, key:string) => {
-        if(key.toLowerCase() !== 'set-cookie')
-          return;
-        const cookie = value.split(';')[0].split('=');
-        if(cookie[0] === BU_COOKIE_SESSION)
-          session = cookie[1];
-        if(cookie[0] === BU_COOKIE_LOGGED && cookie[1] === user)
-          logged = true;
-      });
-
-      if(!logged)
-        return {
-          loading: false,
-          session,
-          logged,
-          user,
-          autoLogged: typeof keep === 'undefined'
-        } as UserType;
-
-      keep && saveUser(user, password);
+      if(logged && keep)
+        saveUser(user, password);
 
       return {
         loading: false,
@@ -98,8 +84,9 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<User
 }
 
 function logoutUser(): Promise<void> {
-  return fetch(`${BU_HOST}${BU_PATH_LOGOUT}`)
+  return CookieManager.clearAll()
     .then(unsaveUser)
+    .then(() => axios.get(`${BU_HOST}${BU_PATH_LOGOUT}`))
 }
 
 function login(user?: string, password?: string, keep?: boolean): Promise<UserType> {
@@ -107,7 +94,14 @@ function login(user?: string, password?: string, keep?: boolean): Promise<UserTy
     return loginUser(user, password, keep);
   else
     return restoreUser()
-      .then(({ user, password }) => loginUser(user, password, keep));
+      .then(({ user, password }) => loginUser(user, password, keep))
+      .catch(() => ({
+        loading: false,
+        session: null,
+        logged: false,
+        user: null,
+        autoLogged: typeof keep === 'undefined'
+      } as UserType));
 }
 
 const User = {

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import BilheteUnico from '../../../assets/bilhete-unico-logo.png';
 import Text from '../Text';
 import CircleButton from '../CircleButton';
@@ -15,7 +15,8 @@ type CardData = {
 
 type CardProps = {
   data: CardData,
-  showLock?: boolean
+  showLock?: boolean,
+  style: ViewStyle
 };
 
 function Card(props: CardProps) {
@@ -24,7 +25,9 @@ function Card(props: CardProps) {
       user,
       code,
       active
-    }, showLock
+    },
+    showLock,
+    style
   } = props;
 
   function renderButton(icon: (props: IconProps) => JSX.Element) {
@@ -38,7 +41,7 @@ function Card(props: CardProps) {
     </View>;
   }
 
-  return <View style={styles.card}>
+  return <View style={[styles.card, style]}>
     <Image source={BilheteUnico} style={styles.image}/>
     <Text.H6>{ user }</Text.H6>
     <Text.H6>{ code }</Text.H6>

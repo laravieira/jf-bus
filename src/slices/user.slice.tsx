@@ -16,10 +16,19 @@ const user = createSlice({
   reducers: {},
   extraReducers: builder => builder
     .addCase(userLogin.pending, state => ({ ...state, loading: true }))
-    .addCase(userLogin.rejected, state => ({ ...state, loading: false }))
+    .addCase(userLogin.rejected, (state, action) => ({
+      ...state,
+      loading: false,
+      autoLogged: typeof action.meta.arg.keep === 'undefined'
+    }))
     .addCase(userLogin.fulfilled, (state, action) => action.payload)
-    .addCase(userLogout.rejected, state => state)
-    .addCase(userLogout.fulfilled, (state, action) => action.payload)
+    .addCase(userLogout.rejected, () => ({
+      logged: false,
+      loading: false,
+      session: null,
+      user: null,
+      autoLogged: true
+    }))
 });
 
 export const userLogin = createAsyncThunk('user/login', (
@@ -37,20 +46,13 @@ export const userLogin = createAsyncThunk('user/login', (
 export const userLogout = createAsyncThunk('user/logout', (
   ignore,
   { getState }
-): Promise<UserType> => {
+): Promise<any> => {
   const { user: state } = getState() as RootState;
 
   if(!state.logged)
     return Promise.reject();
   return User.logout()
     .then(Promise.reject)
-    .catch(() => ({
-      logged: false,
-      loading: false,
-      session: null,
-      user: null,
-      autoLogged: true
-    }));
 })
 
 export default user.reducer;

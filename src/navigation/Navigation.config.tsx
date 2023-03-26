@@ -24,8 +24,6 @@ type Screen = {
   visible: boolean
 }
 
-
-
 export const SCREENS: Screen[] = [
   {
     name: ROUTE_FAVORITES,

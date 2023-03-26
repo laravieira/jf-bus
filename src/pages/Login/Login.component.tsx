@@ -13,7 +13,7 @@ import { userLogin } from '../../slices/user.slice';
 import { useNavigation } from '@react-navigation/native';
 
 function Login() {
-  const { logged, loading, user, autoLogged } = useAppSelector(state => state.user);
+  const { logged, loading, autoLogged } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const { navigate, addListener, removeListener } = useNavigation();
 
@@ -28,17 +28,15 @@ function Login() {
   }, []);
 
   useEffect(() => {
-    if(loading)
-      return;
-    if(!logged && user && !autoLogged)
-      alert('Did u type something wrong?');
-    if(logged)
+    if(logged && !loading)
       // @ts-ignore
-      navigate({ name: ROUTE_RECHARGE })
+      navigate({ name: ROUTE_RECHARGE });
+    if(!logged && !loading && !autoLogged)
+      alert('Did u type something wrong?');
   }, [logged, loading]);
 
   function onPageFocus() {
-    if(!loading && !logged && !autoLogged)
+    if(!logged && !loading && document.length)
       dispatch(userLogin({}))
   }
 
