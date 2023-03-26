@@ -1,18 +1,18 @@
-import PageContainer from '../../components/PageContainer';
-import Text from '../../components/Text';
+import PageContainer from '../../../components/PageContainer';
+import Text from '../../../components/Text';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
-import useAppSelector from '../../hooks/useAppSelector.hook';
-import { ROUTE_LOGIN } from '../../constants';
-import { userLogin, userLogout } from '../../slices/user.slice';
-import useAppDispatch from '../../hooks/useAppDispatch.hook';
-import Line from '../../components/Line';
+import useAppSelector from '../../../hooks/useAppSelector.hook';
+import { ROUTE_BU_LOGIN } from '../../../constants';
+import { userLogin, userLogout } from '../../../slices/user.slice';
+import useAppDispatch from '../../../hooks/useAppDispatch.hook';
+import Line from '../../../components/Line';
 import { StyleSheet } from 'react-native';
-import Card from '../../components/Card';
-import Owners from '../../handlers/Owners.handler';
-import Button from '../../components/Button';
+import Card from '../../../components/Card';
+import Owners from '../../../handlers/Owners.handler';
+import Button from '../../../components/Button';
 
-function Recharge() {
+function Main() {
   const { logged, loading, autoLogged, session } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const { navigate, addListener, removeListener } = useNavigation();
@@ -33,7 +33,7 @@ function Recharge() {
       dispatch(userLogin({}))
     if(!logged && !loading && autoLogged)
       // @ts-ignore
-      navigate({ name: ROUTE_LOGIN });
+      navigate({ name: ROUTE_BU_LOGIN });
   }, [loading, logged]);
 
   function onPageFocus() {
@@ -41,7 +41,7 @@ function Recharge() {
       dispatch(userLogin({}))
     if(!logged && !loading && autoLogged)
       // @ts-ignore
-      navigate({ name: ROUTE_LOGIN });
+      navigate({ name: ROUTE_BU_LOGIN });
   }
 
   function onOwners() {
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Recharge;
+export default Main;

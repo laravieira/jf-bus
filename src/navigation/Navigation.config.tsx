@@ -1,19 +1,22 @@
 import Favorites from '../pages/Favorites';
 import Schedules from '../pages/Schedules';
 import Home from '../pages/Home';
-import Recharge from '../pages/Recharge';
+import BU from '../pages/BU';
 import About from '../pages/About';
-import Login from '../pages/Login';
 import { AtSymbolIcon, ClockIcon, CreditCardIcon, HeartIcon, HomeIcon, UserIcon } from 'react-native-heroicons/outline';
 import { IconProps } from '../components/Navbar/NavbarIcon.component';
 import Schedule from '../pages/Schedule';
 import {
   ROUTE_ABOUT,
-  ROUTE_FAVORITES, ROUTE_HOME,
-  ROUTE_LOGIN,
-  ROUTE_RECHARGE,
+  ROUTE_FAVORITES,
+  ROUTE_HOME,
+  ROUTE_BU_LOGIN,
+  ROUTE_BU_MAIN,
   ROUTE_SCHEDULE,
-  ROUTE_SCHEDULES
+  ROUTE_SCHEDULES,
+  ROUTE_BU_ACCOUNT,
+  ROUTE_BU_RECHARGES,
+  ROUTE_BU_CARDS
 } from '../constants';
 
 type Screen = {
@@ -44,10 +47,10 @@ export const SCREENS: Screen[] = [
     component: Home,
     visible: true
   },{
-    name: ROUTE_RECHARGE,
-    title: 'Recharge Page',
+    name: ROUTE_BU_MAIN,
+    title: 'BU Main Page',
     icon: CreditCardIcon,
-    component: Recharge,
+    component: BU.Main,
     visible: true
   },{
     name: ROUTE_ABOUT,
@@ -56,10 +59,28 @@ export const SCREENS: Screen[] = [
     component: About,
     visible: true
   },{
-    name: ROUTE_LOGIN,
-    title: 'Recharge Login Page',
+    name: ROUTE_BU_LOGIN,
+    title: 'BU Login Page',
     icon: UserIcon,
-    component: Login,
+    component: BU.Login,
+    visible: false
+  },{
+    name: ROUTE_BU_ACCOUNT,
+    title: 'BU Account Page',
+    icon: UserIcon,
+    component: BU.Account,
+    visible: false
+  },{
+    name: ROUTE_BU_RECHARGES,
+    title: 'BU Recharges List Page',
+    icon: UserIcon,
+    component: BU.Recharges,
+    visible: false
+  },{
+    name: ROUTE_BU_CARDS,
+    title: 'BU Cards List Page',
+    icon: UserIcon,
+    component: BU.Cards,
     visible: false
   },{
     name: ROUTE_SCHEDULE,

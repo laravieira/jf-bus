@@ -1,15 +1,15 @@
-import PageContainer from '../../components/PageContainer';
-import Text from '../../components/Text';
-import Line from '../../components/Line';
-import InputField from '../../components/InputField';
+import PageContainer from '../../../components/PageContainer';
+import Text from '../../../components/Text';
+import Line from '../../../components/Line';
+import InputField from '../../../components/InputField';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import CheckField from '../../components/CheckField';
-import { BU_HOST, BU_PATH_PASSWORD, ROUTE_RECHARGE } from '../../constants';
-import Button from '../../components/Button';
-import useAppSelector from '../../hooks/useAppSelector.hook';
-import useAppDispatch from '../../hooks/useAppDispatch.hook';
-import { userLogin } from '../../slices/user.slice';
+import CheckField from '../../../components/CheckField';
+import { BU_HOST, BU_PATH_PASSWORD, ROUTE_BU_MAIN } from '../../../constants';
+import Button from '../../../components/Button';
+import useAppSelector from '../../../hooks/useAppSelector.hook';
+import useAppDispatch from '../../../hooks/useAppDispatch.hook';
+import { userLogin } from '../../../slices/user.slice';
 import { useNavigation } from '@react-navigation/native';
 
 function Login() {
@@ -30,7 +30,7 @@ function Login() {
   useEffect(() => {
     if(logged && !loading)
       // @ts-ignore
-      navigate({ name: ROUTE_RECHARGE });
+      navigate({ name: ROUTE_BU_MAIN });
     if(!logged && !loading && !autoLogged)
       alert('Did u type something wrong?');
   }, [logged, loading]);

@@ -13,11 +13,14 @@ export const BU_PATH_OWNERS = 'Pages/wfm_RechargeInfo_Lst_Async.aspx';
 
 export const BU_PRELOAD_OWNERS = 'Pages/wfm_RechargeInfo_Lst_v2.aspx';
 
-export const ROUTE_FAVORITES = 'favorites';
-export const ROUTE_SCHEDULES = 'schedules';
-export const ROUTE_HOME      = 'home';
-export const ROUTE_RECHARGE  = 'recharge';
-export const ROUTE_ABOUT     = 'about';
-export const ROUTE_LOGIN     = 'login';
-export const ROUTE_SCHEDULE  = 'schedule';
-export const ROUTE_DEFAULT   = ROUTE_HOME;
+export const ROUTE_FAVORITES    = 'favorites';
+export const ROUTE_SCHEDULES    = 'schedules';
+export const ROUTE_HOME         = 'home';
+export const ROUTE_BU_MAIN      = 'bu-main';
+export const ROUTE_BU_LOGIN     = 'bu-login';
+export const ROUTE_BU_ACCOUNT   = 'bu-account';
+export const ROUTE_BU_RECHARGES = 'bu-recharges';
+export const ROUTE_BU_CARDS     = 'bu-cards';
+export const ROUTE_ABOUT        = 'about';
+export const ROUTE_SCHEDULE     = 'schedule';
+export const ROUTE_DEFAULT      = ROUTE_HOME;
