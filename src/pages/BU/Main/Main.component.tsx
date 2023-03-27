@@ -6,9 +6,10 @@ import Card from '../../../components/Card';
 import Menu from '../../../components/Menu';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 'react-native-heroicons/outline';
+import { Owner } from '../../../handlers/Owners.handler';
 
 type MainComponentProps = {
-  card: any //TODO Add proper type to this card,
+  card: Owner|null
   onPageAccount: () => void,
   onPageRecharges: () => void,
   onPageCards: () => void,
@@ -33,10 +34,17 @@ function MainComponent(props: MainComponentProps) {
     </Menu>;
   }
 
+  function renderQuickCard() {
+    if(card)
+      return <Card style={styles.mediumSpace} owner={card} showDetails showRecharge/>;
+    else
+      return <Card.Empty style={styles.mediumSpace}/>;
+  }
+
   return <PageContainer.Scroll style={styles.container}>
     { renderMenu() }
     <View style={styles.content}>
-      <Card style={styles.mediumSpace} data={card} showLock/>
+      { renderQuickCard() }
       <Text.H3 style={styles.largeSpace}>Last Recharges</Text.H3>
       <Line style={styles.smallSpace}/>
       {/* TODO Implement last rechages on the BU Main page */}

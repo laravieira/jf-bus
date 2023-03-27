@@ -5,20 +5,17 @@ import { ROUTE_BU_ACCOUNT, ROUTE_BU_CARDS, ROUTE_BU_LOGIN, ROUTE_BU_RECHARGES } 
 import { userLogin, userLogout } from '../../../slices/user.slice';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 import MainComponent from './Main.component';
+import { loadQuickCard } from '../../../slices/quickCard.slice';
 
 function Main() {
   const { logged, loading, autoLogged } = useAppSelector(state => state.user);
-  const dispatch = useAppDispatch();
+  const { card } = useAppSelector(state => state.quickCard);
   const { navigate, addListener, removeListener } = useNavigation();
-  //TODO properly implement this Card data
-  const card = {
-    user: 'Lara Vieira de Menezes',
-    type: 231,
-    code: '59.20.00021735-2',
-    active: true
-  };
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(loadQuickCard());
+
     addListener('focus', onPageFocus);
 
     return () => removeListener('focus', onPageFocus);

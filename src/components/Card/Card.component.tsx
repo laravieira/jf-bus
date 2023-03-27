@@ -2,49 +2,71 @@ import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import BilheteUnico from '../../../assets/bilhete-unico-logo.png';
 import Text from '../Text';
 import CircleButton from '../CircleButton';
-import { BanknotesIcon, LockClosedIcon, LockOpenIcon } from 'react-native-heroicons/outline';
+import { BanknotesIcon, HomeIcon, ListBulletIcon, LockClosedIcon, LockOpenIcon } from 'react-native-heroicons/outline';
+import { HomeIcon as HomeSolidIcon } from 'react-native-heroicons/solid';
 import CardEmpty from './CardEmpty.component';
 import { IconProps } from '../Navbar/NavbarIcon.component';
-
-type CardData = {
-  user: string,
-  type: number,
-  code: string,
-  active: boolean
-};
+import useAppSelector from '../../hooks/useAppSelector.hook';
+import useAppDispatch from '../../hooks/useAppDispatch.hook';
+import { setQuickCard } from '../../slices/quickCard.slice';
+import { Owner } from '../../handlers/Owners.handler';
 
 type CardProps = {
-  data: CardData,
+  owner: Owner,
   showLock?: boolean,
-  style: ViewStyle
+  showHome?: boolean,
+  showRecharge?: boolean,
+  showDetails?: boolean,
+  style?: ViewStyle
 };
 
 function Card(props: CardProps) {
   const {
-    data: {
-      user,
-      code,
-      active
-    },
+    owner,
     showLock,
+    showHome,
+    showRecharge,
+    showDetails,
     style
   } = props;
+  const { card } = useAppSelector(state => state.quickCard);
+  const dispatch = useAppDispatch();
 
-  function renderButton(icon: (props: IconProps) => JSX.Element) {
-    return <CircleButton>{ icon }</CircleButton>;
+  function onPressHome() {
+    dispatch(setQuickCard(owner))
+  }
+
+  function onPressLock() {
+
+  }
+
+  function onPressRecharge() {
+
+  }
+
+  function onPressDetails() {
+
+  }
+
+  function renderButton(icon: (props: IconProps) => JSX.Element, onPress: () => void) {
+    return <CircleButton onPress={onPress}>{ icon }</CircleButton>;
   }
 
   function renderButtons() {
     return <View style={styles.buttons}>
-      { showLock ? renderButton(active ? LockClosedIcon : LockOpenIcon) : null }
-      { renderButton(BanknotesIcon) }
+      { showHome ? renderButton(card?.card.number === owner.card.number ? HomeSolidIcon : HomeIcon, onPressHome) : null }
+      { showLock ? renderButton(owner.card.status === 'Ativo' ? LockOpenIcon : LockClosedIcon, onPressLock) : null }
+      { showRecharge ? renderButton(BanknotesIcon, onPressRecharge) : null }
+      { showDetails ? renderButton(ListBulletIcon, onPressDetails) : null }
     </View>;
   }
 
   return <View style={[styles.card, style]}>
     <Image source={BilheteUnico} style={styles.image}/>
-    <Text.H6>{ user }</Text.H6>
-    <Text.H6>{ code }</Text.H6>
+    <View style={styles.details}>
+      <Text>{ owner.name }</Text>
+      <Text>{ owner.card.number }</Text>
+    </View>
     { renderButtons() }
   </View>;
 }
@@ -66,6 +88,11 @@ const styles = StyleSheet.create({
   image: {
     width: '67.2%',
     borderWidth: 1
+  },
+  details: {
+    position: 'absolute',
+    bottom: 21,
+    left: 23
   },
   buttons: {
     position: 'absolute',

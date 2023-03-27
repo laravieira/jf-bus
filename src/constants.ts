@@ -5,6 +5,7 @@ export const BU_COOKIE_LOGGED = 'LoginHome';
 
 export const BU_STORE_USER = 'user';
 export const BU_STORE_PASSWORD = 'password';
+export const BU_STORE_QUICKCARD = 'quickcard';
 
 export const BU_PATH_LOGIN = 'Login_Async.aspx';
 export const BU_PATH_LOGOUT = 'Pages/wfm_LogOff.aspx';

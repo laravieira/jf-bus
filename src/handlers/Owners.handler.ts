@@ -17,7 +17,7 @@ export type Owner = {
   group: string|null,
   status: string,
   card: CardNumber,
-  create: Date
+  create: string
 };
 
 type OwnersPage = {
@@ -27,7 +27,7 @@ type OwnersPage = {
   total: number
 }
 
-function Owners(session: string, page?: number): Promise<any> {
+function Owners(session: string, page?: number): Promise<OwnersPage> {
   const query = new URLSearchParams({
     page: `${ page ?? 1 }`,
     type: '1',
@@ -54,7 +54,7 @@ function Owners(session: string, page?: number): Promise<any> {
           id: parseInt(owner[1].part('>').part('>', '<').toString()),
           name: owner[2].slice(1).part(null, '<').toName().toString(),
           cpf: owner[4].slice(1).part(null, '<').toString(),
-          group: group.length ? group : null,
+          group: group.length ? group.toString() : null,
           status: owner[5].part('>', '<').toString(),
           card: {
             number: owner[6].part('>').part('>', '<').toString(),
@@ -66,7 +66,7 @@ function Owners(session: string, page?: number): Promise<any> {
           create: new Date(Date.parse(
             // 2023-03-26T10:59:00.000-03:00
           `${date[2].part(null, ' ')}-${date[1]}-${date[0]}T${hour[0]}:${hour[1]}:${hour[2]}.000-03:00`
-          ))
+          )).toISOString()
         } as Owner;
       });
 
@@ -76,9 +76,7 @@ function Owners(session: string, page?: number): Promise<any> {
         pages: parseInt(pages[pages.length-2].part('\'', '\'').toString()),
         total: parseInt(pages[pages.length-1].part('\'', '\'').toString())
       } as OwnersPage;
-    })
-    .then(JSON.stringify)
-    .then(console.debug);
+    });
 }
 
 export default Owners;

@@ -1,17 +1,31 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import CircleButton from '../CircleButton';
 import { PlusIcon } from 'react-native-heroicons/outline';
+import { ROUTE_BU_CARDS, ROUTE_BU_LOGIN } from '../../constants';
+import useAppSelector from '../../hooks/useAppSelector.hook';
+import { useNavigation } from '@react-navigation/native';
 
 type CardEmptyProps = {
-  onPress: () => void
+  style?: ViewStyle
 };
 
 function CardEmpty(props: CardEmptyProps) {
-  const { onPress } = props;
+  const { logged } = useAppSelector(state => state.user)
+  const { navigate } = useNavigation();
+  const { style } = props;
 
-  return <TouchableOpacity style={styles.card} onPress={onPress}>
+  function onEmptyQuickCard() {
+    if(logged)
+      // @ts-ignore
+      navigate({name: ROUTE_BU_CARDS});
+    else
+      // @ts-ignore
+      navigate({name: ROUTE_BU_LOGIN});
+  }
+
+  return <TouchableOpacity style={[styles.card, style]} onPress={onEmptyQuickCard}>
     <View style={styles.buttonWrapper}>
-      <CircleButton style={styles.button} size={48}>
+      <CircleButton style={styles.button} size={48} onPress={onEmptyQuickCard}>
         { PlusIcon }
       </CircleButton>
     </View>
