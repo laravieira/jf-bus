@@ -11,8 +11,10 @@ export const BU_PATH_LOGIN = 'Login_Async.aspx';
 export const BU_PATH_LOGOUT = 'Pages/wfm_LogOff.aspx';
 export const BU_PATH_PASSWORD = 'wfm_Confirm_Pass.aspx';
 export const BU_PATH_OWNERS = 'Pages/wfm_RechargeInfo_Lst_Async.aspx';
+export const BU_PATH_ORDERS = 'Pages/wfm_Orders_Lst_Async.aspx';
 
 export const BU_PRELOAD_OWNERS = 'Pages/wfm_RechargeInfo_Lst_v2.aspx';
+export const BU_PRELOAD_ORDERS = 'Pages/wfm_Orders_Lst_v2.aspx';
 
 export const ROUTE_FAVORITES    = 'favorites';
 export const ROUTE_SCHEDULES    = 'schedules';

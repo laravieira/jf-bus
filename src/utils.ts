@@ -17,7 +17,7 @@ export class ExtractableString extends String {
     return parseFloat(string
       .slice(string.indexOf(' ')+1)
       .replace('.', '')
-      .replace(',', '')
+      .replace(',', '.')
     )
   }
 

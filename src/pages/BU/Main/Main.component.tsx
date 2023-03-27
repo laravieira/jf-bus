@@ -7,9 +7,11 @@ import Menu from '../../../components/Menu';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 'react-native-heroicons/outline';
 import { Owner } from '../../../handlers/Owners.handler';
+import { Order } from '../../../handlers/Orders.handler';
 
 type MainComponentProps = {
-  card: Owner|null
+  card: Owner|null,
+  orders: Order[],
   onPageAccount: () => void,
   onPageRecharges: () => void,
   onPageCards: () => void,
@@ -19,6 +21,7 @@ type MainComponentProps = {
 function MainComponent(props: MainComponentProps) {
   const {
     card,
+    orders,
     onPageAccount,
     onPageRecharges,
     onPageCards,
@@ -41,13 +44,24 @@ function MainComponent(props: MainComponentProps) {
       return <Card.Empty style={styles.mediumSpace}/>;
   }
 
+  function renderOrder(order: Order) {
+    return <View key={order.id}><Text.H2>{ order.price }: { order.status }</Text.H2></View>;
+  }
+
+  function renderOrders() {
+    if(orders.length)
+    return <>
+      <Text.H3 style={styles.largeSpace}>Last Recharges</Text.H3>
+      <Line style={styles.smallSpace}/>
+      { orders.map(renderOrder) }
+    </>;
+  }
+
   return <PageContainer.Scroll style={styles.container}>
     { renderMenu() }
     <View style={styles.content}>
       { renderQuickCard() }
-      <Text.H3 style={styles.largeSpace}>Last Recharges</Text.H3>
-      <Line style={styles.smallSpace}/>
-      {/* TODO Implement last rechages on the BU Main page */}
+      { renderOrders() }
     </View>
   </PageContainer.Scroll>;
 }

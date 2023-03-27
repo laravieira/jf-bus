@@ -1,14 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_ACCOUNT, ROUTE_BU_CARDS, ROUTE_BU_LOGIN, ROUTE_BU_RECHARGES } from '../../../constants';
 import { userLogin, userLogout } from '../../../slices/user.slice';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 import MainComponent from './Main.component';
 import { loadQuickCard } from '../../../slices/quickCard.slice';
+import Orders, { Order } from '../../../handlers/Orders.handler';
 
 function Main() {
-  const { logged, loading, autoLogged } = useAppSelector(state => state.user);
+  const { logged, loading, autoLogged, session } = useAppSelector(state => state.user);
+  const [orders, setOrders] = useState<Order[]>([]);
   const { card } = useAppSelector(state => state.quickCard);
   const { navigate, addListener, removeListener } = useNavigation();
   const dispatch = useAppDispatch();
@@ -21,13 +23,7 @@ function Main() {
     return () => removeListener('focus', onPageFocus);
   }, []);
 
-  useEffect(() => {
-    if(!logged && !loading && !autoLogged)
-      dispatch(userLogin({}))
-    if(!logged && !loading && autoLogged)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
-  }, [loading, logged]);
+  useEffect(onPageFocus, [loading, logged]);
 
   function onPageFocus() {
     if(!logged && !loading && !autoLogged)
@@ -35,6 +31,10 @@ function Main() {
     if(!logged && !loading && autoLogged)
       // @ts-ignore
       navigate({ name: ROUTE_BU_LOGIN });
+    if(logged && !loading)
+      Orders(session ?? '')
+        .then(page => setOrders(page.orders))
+        .catch(console.warn);
   }
 
   function onPageAccount() {
@@ -58,6 +58,7 @@ function Main() {
 
   const mainComponentProps = {
     card,
+    orders,
     onPageAccount,
     onPageRecharges,
     onPageCards,
