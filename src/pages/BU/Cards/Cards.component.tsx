@@ -6,12 +6,14 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
 import Line from '../../../components/Line';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import Owners, { Owner } from '../../../handlers/Owners.handler';
+import Owners, { Owner, OwnersPage } from '../../../handlers/Owners.handler';
 import Card from '../../../components/Card';
 
 function Cards() {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
+  const [page, setPage] = useState<OwnersPage>({ current: 0, total: 0, pages: 1, owners: []});
+  const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<Owner[]>([]);
 
   useEffect(() => {
@@ -24,17 +26,35 @@ function Cards() {
     return () => removeListener('focus', onPageFocus);
   }, [logged]);
 
+  function loadCards() {
+    if(loading || page.current+1 > page.pages)
+      return;
+    setLoading(true);
+    Owners(session ?? '', page.current+1)
+      .then(page => {
+        setCards([...cards, ...page.owners])
+        return page;
+      })
+      .then(page => {
+        setPage({...page, owners: []})
+        return page;
+      })
+      .catch(console.warn)
+      .finally(() => setLoading(false));
+  }
+
   function onPageFocus() {
     if(cards.length)
       return;
-    Owners(session ?? '')
-      .then(page => setCards(page.owners))
-      .catch(console.warn);
+    loadCards();
   }
 
   function renderHeader() {
     return <View key="header">
-      <Text.H3>All Cards</Text.H3>
+      <View style={styles.title}>
+        <Text.H3>All Cards</Text.H3>
+        <Text>{ `${cards.length}/${page.total}` }</Text>
+      </View>
       <Line style={styles.smallSpace}/>
     </View>;
   }
@@ -50,11 +70,27 @@ function Cards() {
     </>;
   }
 
+  function renderFooter() {
+    return <View style={styles.footer}>
+      { loading
+        ? <Text>Loading more...</Text>
+        : <Text>{ `${ cards.length }/${ page.total }` }</Text>
+      }
+    </View>;
+  }
+
   function keyExtractor(owner: Owner): string {
     return `${owner.id}`;
   }
 
-  return <PageContainer.List data={cards} renderItem={renderItem} keyExtractor={keyExtractor} />;
+  return <PageContainer.List
+    data={cards}
+    renderItem={renderItem}
+    keyExtractor={keyExtractor}
+    onEndReached={loadCards}
+    onEndReachedThreshold={.3}
+    ListFooterComponent={renderFooter()}
+  />;
 }
 
 const styles = StyleSheet.create({
@@ -62,8 +98,17 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 24
   },
+  title: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end'
+  },
   card: {
     marginBottom: 16
+  },
+  footer: {
+    paddingVertical: 24,
+    alignItems: 'center'
   }
 });
 

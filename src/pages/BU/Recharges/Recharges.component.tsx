@@ -6,13 +6,15 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
 import Line from '../../../components/Line';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import Orders, { Order as OrderType } from '../../../handlers/Orders.handler';
+import Orders, { Order as OrderType, OrdersPage } from '../../../handlers/Orders.handler';
 import Order from '../../../components/Order';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 
 function Recharges() {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
+  const [page, setPage] = useState<OrdersPage>({ current: 0, total: 0, pages: 1, orders: []});
+  const [loading, setLoading] = useState<boolean>(false);
   const [orders, setOrders] = useState<OrderType[]>([]);
 
   useEffect(() => {
@@ -25,17 +27,35 @@ function Recharges() {
     return () => removeListener('focus', onPageFocus);
   }, [logged]);
 
+  function loadOrders() {
+    if(loading || page.current+1 > page.pages)
+      return;
+    setLoading(true);
+    Orders(session ?? '', page.current+1)
+      .then(page => {
+        setOrders([...orders, ...page.orders])
+        return page;
+      })
+      .then(page => {
+        setPage({...page, orders: []})
+        return page;
+      })
+      .catch(console.warn)
+      .finally(() => setLoading(false));
+  }
+
   function onPageFocus() {
     if(orders.length)
       return;
-    Orders(session ?? '')
-      .then(page => setOrders(page.orders))
-      .catch(console.warn);
+    loadOrders();
   }
 
   function renderHeader() {
     return <View key="header" style={styles.header}>
-      <Text.H3>All Recharges</Text.H3>
+      <View style={styles.title}>
+        <Text.H3>All Recharges</Text.H3>
+        <Text>{ `${orders.length}/${page.total}` }</Text>
+      </View>
       <Line style={styles.line}/>
     </View>;
   }
@@ -51,8 +71,17 @@ function Recharges() {
     </>;
   }
 
-  function keyExtractor(order: OrderType): string {
-    return `${order.id}`;
+  function renderFooter() {
+    return <View style={styles.footer}>
+      { loading
+        ? <Text>Loading more...</Text>
+        : <Text>{ `${ orders.length }/${ page.total }` }</Text>
+      }
+    </View>;
+  }
+
+  function keyExtractor(order: OrderType, index: number): string {
+    return `${index}-${order.id}`;
   }
 
   return <PageContainer.List
@@ -60,6 +89,9 @@ function Recharges() {
     renderItem={renderItem}
     keyExtractor={keyExtractor}
     style={styles.page}
+    onEndReached={loadOrders}
+    onEndReachedThreshold={.3}
+    ListFooterComponent={renderFooter()}
   />;
 }
 
@@ -70,9 +102,18 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: PAGE_HORIZONTAL_PADDING
   },
+  title: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end'
+  },
   line: {
     marginTop: 8,
     marginBottom: 24
+  },
+  footer: {
+    paddingVertical: 24,
+    alignItems: 'center'
   }
 });
 

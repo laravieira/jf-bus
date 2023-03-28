@@ -20,7 +20,7 @@ export type Owner = {
   create: string
 };
 
-type OwnersPage = {
+export type OwnersPage = {
   owners: Owner[],
   current: number,
   pages: number,

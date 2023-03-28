@@ -11,7 +11,7 @@ export type Order = {
   price: number
 };
 
-type OrdersPage = {
+export type OrdersPage = {
   orders: Order[],
   current: number,
   pages: number,
@@ -28,7 +28,7 @@ function Orders(session: string, page?: number): Promise<OrdersPage> {
     .then(data => data.data.includes('CabecalhoGrid') ? new ExtractableString(data.data) : Promise.reject())
     .then(data => {
       const pages = data.part('page_CallBack', '</script>').split(',');
-      const orders = data.split('GridLinha').splice(1, 10).map(line => {
+      const orders = data.part('<script').split('GridLinha').splice(1, 100).map(line => {
         const date = line.split('<td>')[1].part(null, '</td').split('/');
 
         return {
