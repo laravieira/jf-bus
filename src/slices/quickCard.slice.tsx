@@ -14,22 +14,25 @@ const initialState: QuickCardState = {
 const quickCard = createSlice({
   name: 'quickCard',
   initialState,
-  reducers: {
-    setQuickCard: (rawState: QuickCardState, action: PayloadAction<Owner>) => {
-      const { card: state } = rawState;
-      const { card: { number } } = action.payload;
-
-      if(number === state?.card.number) {
-        QuickCard.unsaveCard();
-        return { loading: false, card: null };
-      }
-
-      QuickCard.saveCard(action.payload);
-      return { loading: false, card: action.payload }
-    }
-  },
+  reducers: {},
   extraReducers: builder => builder
-    .addCase(loadQuickCard.pending, (state) => ({...state, loading: true}))
+    .addCase(setQuickCard.fulfilled, (state, action: PayloadAction<QuickCardState>) => ({ ...action.payload }))
+    .addCase(loadQuickCard.fulfilled, (state, action: PayloadAction<QuickCardState>) => ({ ...action.payload }))
+});
+
+export const setQuickCard = createAsyncThunk('quick-card/set', (
+  onwer: Owner,
+  { getState }
+): Promise<QuickCardState> => {
+  const { quickCard: { card: state } } = getState() as RootState;
+  const { card: { number } } = onwer;
+
+  if(number === state?.card.number)
+    return QuickCard.unsaveCard()
+      .then(() => ({ card: null }));
+
+  return QuickCard.saveCard(onwer)
+    .then(() => ({ card: onwer }))
 });
 
 export const loadQuickCard = createAsyncThunk('quick-card/load', (
@@ -41,11 +44,7 @@ export const loadQuickCard = createAsyncThunk('quick-card/load', (
   if(card)
     return Promise.reject();
   return QuickCard.restoreCard()
-    .then(owner => ({
-      card: owner,
-      loading: false
-    }));
+    .then(owner => ({ card: owner }));
 });
 
-export const { setQuickCard } = quickCard.actions;
 export default quickCard.reducer;

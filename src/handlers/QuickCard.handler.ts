@@ -2,14 +2,12 @@ import { deleteItemAsync, getItemAsync, setItemAsync } from 'expo-secure-store';
 import { BU_STORE_QUICKCARD } from '../constants';
 import { Owner } from './Owners.handler';
 
-function saveCard(card: Owner): void {
-  setItemAsync(BU_STORE_QUICKCARD, JSON.stringify(card))
-    .catch(console.warn);
+function saveCard(card: Owner): Promise<void> {
+  return setItemAsync(BU_STORE_QUICKCARD, JSON.stringify(card));
 }
 
-function unsaveCard(): void {
-  deleteItemAsync(BU_STORE_QUICKCARD)
-    .catch(console.warn);
+function unsaveCard(): Promise<void> {
+  return deleteItemAsync(BU_STORE_QUICKCARD);
 }
 
 function restoreCard(): Promise<Owner> {
