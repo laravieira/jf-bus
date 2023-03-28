@@ -7,11 +7,12 @@ import Menu from '../../../components/Menu';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 'react-native-heroicons/outline';
 import { Owner } from '../../../handlers/Owners.handler';
-import { Order } from '../../../handlers/Orders.handler';
+import { Order as OrderType } from '../../../handlers/Orders.handler';
+import Order from '../../../components/Order';
 
 type MainComponentProps = {
   card: Owner|null,
-  orders: Order[],
+  orders: OrderType[],
   onPageAccount: () => void,
   onPageRecharges: () => void,
   onPageCards: () => void,
@@ -38,31 +39,30 @@ function MainComponent(props: MainComponentProps) {
   }
 
   function renderQuickCard() {
-    if(card)
-      return <Card style={styles.mediumSpace} owner={card} showDetails showRecharge/>;
-    else
-      return <Card.Empty style={styles.mediumSpace}/>;
+    return <View style={styles.quickcard}>
+      { card ? <Card owner={card} showDetails showRecharge/> : <Card.Empty/> }
+    </View>;
   }
 
-  function renderOrder(order: Order) {
-    return <View key={order.id}><Text.H2>{ order.price }: { order.status }</Text.H2></View>;
+  function renderOrder(order: OrderType) {
+    return <Order key={order.id} order={order} />;
   }
 
   function renderOrders() {
     if(orders.length)
     return <>
-      <Text.H3 style={styles.largeSpace}>Last Recharges</Text.H3>
-      <Line style={styles.smallSpace}/>
+      <View style={styles.recharges}>
+        <Text.H3>Last Recharges</Text.H3>
+        <Line/>
+      </View>
       { orders.map(renderOrder) }
     </>;
   }
 
   return <PageContainer.Scroll style={styles.container}>
     { renderMenu() }
-    <View style={styles.content}>
-      { renderQuickCard() }
-      { renderOrders() }
-    </View>
+    { renderQuickCard() }
+    { renderOrders() }
   </PageContainer.Scroll>;
 }
 
@@ -70,21 +70,15 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0
   },
-  content: {
+  quickcard: {
+    marginTop: 24,
     paddingHorizontal: PAGE_HORIZONTAL_PADDING
   },
-  largeSpace: {
-    marginTop: 32
-  },
-  mediumSpace: {
-    marginTop: 24,
-  },
-  smallSpace: {
-    marginTop: 8
-  },
-  small: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+  recharges: {
+    gap: 8,
+    marginTop: 32,
+    marginBottom: 24,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING
   }
 });
 

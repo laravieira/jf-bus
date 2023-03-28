@@ -30,6 +30,7 @@ function Orders(session: string, page?: number): Promise<OrdersPage> {
       const pages = data.part('page_CallBack', '</script>').split(',');
       const orders = data.split('GridLinha').splice(1, 10).map(line => {
         const date = line.split('<td>')[1].part(null, '</td').split('/');
+
         return {
           id: parseInt(line.mpart('DetailOrder(', '>', '<').toString()),
           number: parseInt(line.mpart('DetailOrder(', ',', ',').toString()),
@@ -37,8 +38,8 @@ function Orders(session: string, page?: number): Promise<OrdersPage> {
           owner: parseInt(line.part('DetailOrder(', ',').toString()),
           price: line.split('<td>')[2].slice(3).part(null, '</td').toPrice(),
           date: new Date(Date.parse(
-            // 2023-03-26T00:00:00.000+00:00
-            `${date[2]}-${date[1]}-${date[0]}T00:00:00.000+00:00`
+            // 2023-03-26T00:00:00.000-03:00
+            `${date[2].toString()}-${date[1].toString()}-${date[0].toString()}T00:00:00.000-03:00`
           ))
         } as Order;
       });
