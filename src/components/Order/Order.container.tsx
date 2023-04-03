@@ -1,6 +1,8 @@
 import { Order as OrderType } from '../../handlers/Orders.handler';
 import { ViewStyle } from 'react-native';
 import OrderComponent from './Order.component';
+import OrderHandler from '../../handlers/Order.handler';
+import useAppSelector from '../../hooks/useAppSelector.hook';
 
 type OrderProps = {
   order: OrderType,
@@ -8,9 +10,14 @@ type OrderProps = {
 };
 
 function Order(props: OrderProps) {
+  const { session } = useAppSelector(state => state.user);
 
   function onDetails() {
+    const { order: { owner, number, status } } = props;
     console.debug('onDetails');
+    OrderHandler(session ?? '', owner, number, status)
+      .then(data => console.debug(data))
+      .catch(console.warn)
     //TODO Implement order details page
   }
 

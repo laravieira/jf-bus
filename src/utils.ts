@@ -43,6 +43,16 @@ export class ExtractableString extends String {
     return this.toString().split(separator, limit).map(string => new ExtractableString(string));
   }
 
+  // @ts-ignore
+  replace(searchValue: string | RegExp, replaceValue: string): ExtractableString {
+    return new ExtractableString(this.toString().replace(searchValue, replaceValue));
+  }
+
+  // @ts-ignore
+  replaceAll(searchValue: string | RegExp, replaceValue: string): ExtractableString {
+    return new ExtractableString(this.toString().replaceAll(searchValue, replaceValue));
+  }
+
   slices(...from: string[]): ExtractableString {
     return new ExtractableString(
       from.reduce(
