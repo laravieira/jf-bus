@@ -8,6 +8,7 @@ export const BU_STORE_PASSWORD  = 'password';
 export const BU_STORE_QUICKCARD = 'quickcard';
 
 export const BU_PATH_LOGIN        = 'Login_Async.aspx';
+export const BU_PATH_ISLOGGED     = 'wfm_default.aspx';
 export const BU_PATH_LOGOUT       = 'Pages/wfm_LogOff.aspx';
 export const BU_PATH_PASSWORD     = 'wfm_Confirm_Pass.aspx';
 export const BU_PATH_USER         = 'Pages/wfm_Provider_Upd.aspx';

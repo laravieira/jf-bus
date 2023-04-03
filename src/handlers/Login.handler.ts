@@ -2,7 +2,7 @@ import { getItemAsync, setItemAsync, deleteItemAsync } from 'expo-secure-store';
 import CookieManager, { Cookies } from '@react-native-cookies/cookies';
 import {
   BU_COOKIE_LOGGED,
-  BU_COOKIE_SESSION,
+  BU_COOKIE_SESSION, BU_PATH_ISLOGGED,
   BU_PATH_LOGIN,
   BU_PATH_LOGOUT,
   BU_STORE_PASSWORD,
@@ -88,6 +88,11 @@ function logoutUser(session: string): Promise<void> {
     .then(() => useAxios(session).get(`${BU_PATH_LOGOUT}`))
 }
 
+function isLogged(session: string): Promise<boolean> {
+  return useAxios(session).get(BU_PATH_ISLOGGED)
+    .then(data => data.data.includes('wfm_default.aspx'));
+}
+
 function login(user?: string, password?: string, keep?: boolean): Promise<LoginType> {
   if(user && password)
     return loginUser(user, password, keep);
@@ -105,7 +110,8 @@ function login(user?: string, password?: string, keep?: boolean): Promise<LoginT
 
 const Login = {
   logout: logoutUser,
-  login
+  login,
+  isLogged
 };
 
 export default Login;
