@@ -12,6 +12,7 @@ import { setQuickCard } from '../../slices/quickCard.slice';
 import { Owner } from '../../handlers/Owners.handler';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTE_BU_CARD } from '../../constants';
+import CardHandler from '../../handlers/Card.handler';
 
 type CardProps = {
   owner: Owner,
@@ -32,6 +33,7 @@ function Card(props: CardProps) {
     style
   } = props;
   const { card } = useAppSelector(state => state.quickCard);
+  const { session } = useAppSelector(state => state.user);
   const { navigate } = useNavigation();
   const dispatch = useAppDispatch();
 
@@ -44,7 +46,9 @@ function Card(props: CardProps) {
   }
 
   function onPressRecharge() {
-
+    CardHandler(session ?? '', owner.card.number)
+      .then(card => console.debug(card.orders.orders))
+      .catch(console.warn)
   }
 
   function onPressDetails() {

@@ -18,12 +18,15 @@ export const BU_PATH_ORDERS       = 'Pages/wfm_Orders_Lst_Async.aspx';
 export const BU_PATH_ORDER        = 'Pages/wfm_Orders_Det_v2.aspx';
 export const BU_PATH_ORDER_CARDS  = 'Pages/wfm_Orders_Det_Async.aspx';
 export const BU_PATH_ORDER_PRINT  = 'Pages/wfm_Order_Itens_Print.aspx';
+export const BU_PATH_CARD         = 'Pages/wfm_OrdersToCards_Lst_v2.aspx';
+export const BU_PATH_CARD_ORDERS  = 'Pages/wfm_OrdersToCards_Lst_Async.aspx';
 
 export const BU_PRELOAD_USER   = 'wfm_default.aspx';
 export const BU_PRELOAD_OWNERS = 'Pages/wfm_RechargeInfo_Lst_v2.aspx';
 export const BU_PRELOAD_OWNER  = 'wfm_default.aspx';
 export const BU_PRELOAD_ORDERS = 'Pages/wfm_Orders_Lst_v2.aspx';
 export const BU_PRELOAD_ORDER  = 'wfm_default.aspx';
+export const BU_PRELOAD_CARD   = 'wfm_default.aspx';
 
 export const ROUTE_FAVORITES    = 'favorites';
 export const ROUTE_SCHEDULES    = 'schedules';
