@@ -10,6 +10,8 @@ import useAppSelector from '../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { setQuickCard } from '../../slices/quickCard.slice';
 import { Owner } from '../../handlers/Owners.handler';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTE_BU_CARD } from '../../constants';
 
 type CardProps = {
   owner: Owner,
@@ -30,6 +32,7 @@ function Card(props: CardProps) {
     style
   } = props;
   const { card } = useAppSelector(state => state.quickCard);
+  const { navigate } = useNavigation();
   const dispatch = useAppDispatch();
 
   function onPressHome() {
@@ -45,7 +48,8 @@ function Card(props: CardProps) {
   }
 
   function onPressDetails() {
-
+    // @ts-ignore
+    navigate({ name: ROUTE_BU_CARD, params: { owner }});
   }
 
   function renderButton(icon: (props: IconProps) => JSX.Element, onPress: () => void) {

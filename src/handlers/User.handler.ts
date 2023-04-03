@@ -1,5 +1,5 @@
 import useAxios from '../hooks/useAxios.hook';
-import { BU_PATH_ADDRESS, BU_PATH_USER, BU_PRELOAD_USER } from '../constants';
+import { BU_PATH_USER_ADDRESS, BU_PATH_USER, BU_PRELOAD_USER } from '../constants';
 import { ExtractableString } from '../utils';
 
 type UserPhoneType = {
@@ -93,7 +93,7 @@ function User(session: string): Promise<UserType> {
     }))
     .then(preload => Promise.all([
       useAxios(session).get(BU_PATH_USER),
-      useAxios(session).get(BU_PATH_ADDRESS)
+      useAxios(session).get(BU_PATH_USER_ADDRESS)
     ]).then(resolved => [...resolved, preload]))
 
     .then(datas => {

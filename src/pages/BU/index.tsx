@@ -3,13 +3,15 @@ import Account from './Account';
 import Login from './Login';
 import Recharges from './Recharges';
 import Cards from './Cards';
+import Card from './Card';
 
 const BU = {
   Main,
   Login,
   Account,
   Recharges,
-  Cards
+  Cards,
+  Card
 };
 
 export default BU;

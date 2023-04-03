@@ -16,8 +16,9 @@ import {
   ROUTE_SCHEDULES,
   ROUTE_BU_ACCOUNT,
   ROUTE_BU_RECHARGES,
-  ROUTE_BU_CARDS
+  ROUTE_BU_CARDS, ROUTE_BU_CARD, ROUTE_DEFAULT
 } from '../constants';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 type Screen = {
   name: string,
@@ -26,6 +27,11 @@ type Screen = {
   component: (props: any) => JSX.Element,
   visible: boolean
 }
+
+export type RootParamsList = BottomTabScreenProps<{
+  [ROUTE_DEFAULT]: undefined,
+  [ROUTE_BU_CARD]: { owner: number }
+}>
 
 export const SCREENS: Screen[] = [
   {
@@ -81,6 +87,12 @@ export const SCREENS: Screen[] = [
     title: 'BU Cards List Page',
     icon: UserIcon,
     component: BU.Cards,
+    visible: false
+  },{
+    name: ROUTE_BU_CARD,
+    title: 'Card Details Page',
+    icon: ClockIcon,
+    component: BU.Card,
     visible: false
   },{
     name: ROUTE_SCHEDULE,

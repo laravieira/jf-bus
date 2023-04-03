@@ -2,11 +2,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
 import { IconProps } from '../components/Navbar/NavbarIcon.component';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SCREENS } from './Navigation.config';
+import { RootParamsList, SCREENS } from './Navigation.config';
 import SearchBar from '../components/SearchBar';
 import { ROUTE_DEFAULT } from '../constants';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootParamsList>();
 
 function renderScreen(screen: {
   name: string,
@@ -18,7 +18,8 @@ function renderScreen(screen: {
   const { name, title, icon, component, visible } = screen;
 
   return <Tab.Screen
-    name={name}
+    // @ts-ignore
+    name={ name }
     component={component}
     options={{
       title,
@@ -35,6 +36,7 @@ function Navigation() {
     <Tab.Navigator
       screenOptions={{ headerShown: false }}
       tabBar={ props => <Navbar { ...props } />}
+      // @ts-ignore
       initialRouteName={ ROUTE_DEFAULT }
       sceneContainerStyle={{backgroundColor: 'transparent'}}
     >
