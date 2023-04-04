@@ -3,6 +3,7 @@ import { ViewStyle } from 'react-native';
 import OrderComponent from './Order.component';
 import OrderHandler from '../../handlers/Order.handler';
 import useAppSelector from '../../hooks/useAppSelector.hook';
+import Receipt from '../../handlers/Receipt.handler';
 
 type OrderProps = {
   order: OrderType,
@@ -32,8 +33,12 @@ function Order(props: OrderProps) {
   }
 
   function onDownload() {
+    const { order: { owner, number, status } } = props;
     console.debug('onDownload');
     //TODO Implement order recipe/bill download
+    Receipt(session ?? '', owner, number, status)
+      .then(data => console.debug(data))
+      .catch(console.warn)
   }
 
   function onDuplicate() {
