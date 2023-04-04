@@ -7,7 +7,7 @@ import {
 import { ExtractableString } from '../utils';
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
-import { moveAsync } from 'expo-file-system';
+import { deleteAsync, moveAsync } from 'expo-file-system';
 
 function Receipt(session: string, owner: number, number: number, status: number): Promise<void> {
   const query = new URLSearchParams({
@@ -37,17 +37,27 @@ function Receipt(session: string, owner: number, number: number, status: number)
         data: pdf.toString()
       };
     })
+
+    // Save pdf in cache
     .then(pdf => printToFileAsync({ html: pdf.data })
       .then(({ uri }) => ({
         name: pdf.name,
         uri
       })))
+
+    // Change the file name
     .then(({ name, uri }) => moveAsync({
-      from: uri,
-      //  file:///data/user/0/me.laravieira.jfbus/cache/Print/15886b64-da30-4bc6-9b33-0cb7ff3f0c3e.pdf
-      to: uri.replace(/\/[\w|-]*\.pdf/, `/BU - ${name}.pdf`)
-    }).then(() => uri.replace(/\/[\w|-]*\.pdf/, `/BU - ${name}.pdf`)))
-    .then(uri => shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' }));
+        from: uri,
+        //  file:///data/user/0/me.laravieira.jfbus/cache/Print/15886b64-da30-4bc6-9b33-0cb7ff3f0c3e.pdf
+        to: uri.replace(/\/[\w|-]*\.pdf/, `/BU - ${name}.pdf`)
+      }).then(() => uri.replace(/\/[\w|-]*\.pdf/, `/BU - ${name}.pdf`)))
+
+    // Call sharing pop-up to share the pdf
+    .then(uri => shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' })
+      .then(() => uri))
+
+    // Delete cache
+    .then(uri => deleteAsync(uri, { idempotent: true }));
 }
 
 export default Receipt;
