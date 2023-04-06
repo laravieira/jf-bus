@@ -4,6 +4,7 @@ import OrderComponent from './Order.component';
 import OrderHandler from '../../handlers/Order.handler';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import Receipt from '../../handlers/Receipt.handler';
+import Billet from '../../handlers/Billet.handler';
 
 type OrderProps = {
   order: OrderType,
@@ -28,8 +29,11 @@ function Order(props: OrderProps) {
   }
 
   function onCodeCopy() {
+    const { order: { owner, number, status } } = props;
     console.debug('onCodeCopy');
     //TODO Implement order auto copy barcode
+    Billet.requestFile(session ?? '', owner, number, status)
+      .catch(console.warn)
   }
 
   function onDownload() {
