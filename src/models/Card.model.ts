@@ -1,0 +1,69 @@
+import { Page } from './Page.model';
+
+/** @typedef {object} CardDesign The card design data
+ * @property {string} name Design name
+ * @property {number} code Deisgn code [400, 570]
+ */
+
+/** @typedef {object} CardBillet The card billet ids
+ * @property {number} user PRVID: Manager account id
+ * @property {number} key RIID: Special card's owner id (worker special id)
+ * @property {number} id RDT_ID
+ * @property {string} line ID
+ */
+
+/** @typedef {object} CardOrder A card order
+ * @property {number} id Order's id
+ * @property {number} credit Amount recharged to this card
+ * @property {string} status Order's status
+ * @property {string} charge Date of recharge
+ */
+
+/** @typedef {object} Card The card used on the bus
+ * @property {string} number The card number, as printed on the physical card, like "99.99.99999999-9"
+ * @property {string} name Card's owner full name, as printed on the phisical card
+ * @property {number} owner Card's owner id (the worker id)
+ * @property {number} iss Card's iss number (first part of card's number)
+ * @property {number} id Card's riid number (second part of card's number)
+ * @property {number} srn Card's srn number (third part of card's number)
+ * @prop {CardDesign} design Card's design name and code
+ * @prop {string} status Card's status ["Ativo", "Inativo", "Demitido"]
+ * @prop {CardBillet} billet Card's billet ids (only used on billet creation)
+ * @prop {Page<CardOrder>} orders Card's order history
+ */
+
+/** @type {CardDesign} */
+export type CardDesign = {
+  name: string,
+  code: number
+};
+
+/** @type {CardBillet} */
+export type CardBillet = {
+  user: number, // PRVID
+  key: number, // RIID
+  id: number, // RDT_ID
+  line: string
+};
+
+/** @type {CardOrder} */
+export type CardOrder = {
+  id: number,
+  credit: number,
+  status: string,
+  charge: string
+};
+
+/** @type {Card} */
+export type Card = {
+  number: string, // CARDCODE
+  name: string, // USERNAME
+  owner: number, // USRID
+  iss: number,
+  id: number,
+  snr: number,
+  design?: CardDesign,
+  status?: string,
+  billet?: CardBillet,
+  orders?: Page<CardOrder>
+};

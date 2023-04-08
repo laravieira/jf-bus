@@ -1,3 +1,5 @@
+import { Page } from './models/Page.model';
+
 export class ExtractableString extends String {
   toName(): ExtractableString {
     return new ExtractableString(
@@ -76,5 +78,28 @@ export class ExtractableString extends String {
     string = from.length ? string.slice(string.indexOf(from)) : string;
 
     return new ExtractableString(string).part(begin, end, keep_begin);
+  }
+}
+
+export function parseCardNumber(number: ExtractableString|string): number[] {
+  if(typeof number === 'string')
+    number = new ExtractableString(number);
+  const value = number.part(null, '-').split('.');
+
+  return [
+    parseInt(value[0].toString()),
+    parseInt(value[1].toString()),
+    parseInt(value[2].toString()),
+  ];
+}
+
+export function parsePage<T>(data: ExtractableString, items: T[], delimiter: string = '\''): Page<T> {
+  const pages = data.part('page_CallBack', '</script>').split(',');
+
+  return {
+    items,
+    current: parseInt(pages[pages.length - 3].part(delimiter, delimiter).toString()),
+    pages: parseInt(pages[pages.length - 2].part(delimiter, delimiter).toString()),
+    total: parseInt(pages[pages.length - 1].part(delimiter, delimiter).toString())
   }
 }
