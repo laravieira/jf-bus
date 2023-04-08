@@ -29,6 +29,7 @@ export const BU_BILLET_CREATE_MODE    = 'wfm_Orders_Ins_v2.aspx';
 export const BU_BILLET_CREATE_LIST    = 'Pages/wfm_Orders_Ins_Async.aspx';
 export const BU_BILLET_CREATE_VALUE   = 'Pages/wfm_Orders_Ins_v2.aspx';
 export const BU_BILLET_CREATE_CONFIRM = 'Pages/wfm_Orders_Confirm_Ins.aspx';
+export const BU_BILLET_DELETE         = 'Pages/wfm_Orders_Lst_Async.aspx';
 
 export const BU_PRELOAD_USER          = 'wfm_default.aspx';
 export const BU_PRELOAD_OWNERS        = 'Pages/wfm_RechargeInfo_Lst_v2.aspx';
@@ -39,6 +40,7 @@ export const BU_PRELOAD_CARD          = 'wfm_default.aspx';
 export const BU_PRELOAD_RECEIPT       = 'wfm_default.aspx';
 export const BU_PRELOAD_BILLET        = 'wfm_default.aspx';
 export const BU_PRELOAD_BILLET_CREATE = 'wfm_default.aspx';
+export const BU_PRELOAD_BILLET_DELETE = 'wfm_default.aspx';
 
 export const ROUTE_FAVORITES    = 'favorites';
 export const ROUTE_SCHEDULES    = 'schedules';

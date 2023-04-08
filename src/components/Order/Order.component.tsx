@@ -28,7 +28,7 @@ function Order(props: OrderComponentProps) {
   function renderStatus(status: number) {
     if(status === 1)
       return <><SwatchIcon size={18} color="#1F5FF3"/><Text>New</Text></>;
-    if(status === 2)
+    if(status === 2 || status === 4)
       return <><ArchiveBoxXMarkIcon size={18} color="#BE3333"/><Text>Canceled</Text></>;
     if(status === 3)
       return <><CheckIcon size={18} color="#00A72F"/><Text>Done</Text></>;

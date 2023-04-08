@@ -66,14 +66,14 @@ async function getCardToRecharge(session: string, card: Card, order: number): Pr
   return Promise.reject('Card not available to recharge.');
 }
 
-/** Create Billet Handler
- * Creates a new billet to recharge the given card with the given value
+/** Create Order Handler
+ * Creates a new order to recharge the given card with the given value
  * @param {string} session The key of a valid logged session
  * @param {Card} card The card to be recharged (design data is required to be defined)
  * @param {number} value The amount of money to recharge into the card
  * @return {CreatedOrder} The data the created billet
  */
-function CreateBillet(session: string, card: Card, value: number): Promise<CreatedOrder> {
+function CreateOrder(session: string, card: Card, value: number): Promise<CreatedOrder> {
   return useAxios(session).get(BU_PRELOAD_BILLET_CREATE)
 
     // 1° step: collect validators, set mode, set card design/iss
@@ -167,4 +167,4 @@ function CreateBillet(session: string, card: Card, value: number): Promise<Creat
     })
 }
 
-export default CreateBillet;
+export default CreateOrder;
