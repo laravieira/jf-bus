@@ -1,6 +1,6 @@
 import { BU_PATH_OWNERS, BU_PRELOAD_OWNERS } from '../constants';
 import useAxios from '../hooks/useAxios.hook';
-import { ExtractableString } from '../utils';
+import { ExtractableString } from '../utils/ExtractableString.util';
 
 type CardNumber = {
   number: string,

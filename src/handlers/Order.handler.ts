@@ -4,7 +4,7 @@ import {
   BU_PATH_ORDER_CARDS, BU_PATH_ORDER_PRINT,
   BU_PRELOAD_ORDER,
 } from '../constants';
-import { ExtractableString } from '../utils';
+import { ExtractableString } from '../utils/ExtractableString.util';
 
 type OrderOwnerType = {
   id: number,

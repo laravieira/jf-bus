@@ -6,13 +6,13 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
 import Line from '../../../components/Line';
 import { StyleSheet } from 'react-native';
-import User, { UserType } from '../../../handlers/User.handler';
+import User from '../../../handlers/User.handler';
 
 function Account() {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<UserType>();
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
     if(!logged)

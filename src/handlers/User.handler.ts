@@ -1,89 +1,11 @@
 import useAxios from '../hooks/useAxios.hook';
 import { BU_PATH_USER_ADDRESS, BU_PATH_USER, BU_PRELOAD_USER } from '../constants';
-import { ExtractableString } from '../utils';
+import { parseAddressStateAcronym } from '../utils/parseAddressAcronym.util';
+import { User as UserModel } from '../models/User.model';
+import { Address } from '../models/Address.model';
+import { ExtractableString } from '../utils/ExtractableString.util';
 
-type UserPhoneType = {
-  ddd: number,
-  number: number
-};
-
-type UserAddressAcronym = {
-  acromn: string,
-  name?: string
-}
-
-type UserAddressType = {
-  id: number,
-  cep: number,
-  state: UserAddressAcronym,
-  type: UserAddressAcronym,
-  city: string,
-  district: string,
-  street: string,
-  number: number,
-  complement: string|undefined
-};
-
-export type UserType = {
-  id: number,
-  status: string,
-  name: string,
-  cpf: string,
-  email: string,
-  site: string,
-  phone: UserPhoneType,
-  newsletter: boolean,
-  address: UserAddressType[]
-};
-
-function parseAddressType(type: string): string|undefined {
-  let converted: string|undefined;
-  switch(type) {
-    case 'RES': converted = 'Residência'; break;
-    case 'COM': converted = 'Empresa'; break;
-    case 'Particular': converted = 'Particular'; break;
-    default: converted = undefined; break;
-  }
-  return converted;
-}
-
-function parseAddressState(state: string): string|undefined {
-  let converted: string|undefined;
-  switch(state) {
-    case 'AC': converted = 'Acre'; break;
-    case 'AL': converted = 'Alagoas'; break;
-    case 'AP': converted = 'Amapá'; break;
-    case 'AM': converted = 'Amazonas'; break;
-    case 'BA': converted = 'Bahia'; break;
-    case 'CE': converted = 'Ceará'; break;
-    case 'DF': converted = 'Distrito Federal'; break;
-    case 'ES': converted = 'Espírito Santo'; break;
-    case 'GO': converted = 'Goiás'; break;
-    case 'MA': converted = 'Maranhão'; break;
-    case 'MT': converted = 'Mato Grosso'; break;
-    case 'MS': converted = 'Mato Grosso do Sul'; break;
-    case 'MG': converted = 'Minas Gerais'; break;
-    case 'PA': converted = 'Pará'; break;
-    case 'PB': converted = 'Paraíba'; break;
-    case 'PR': converted = 'Paraná'; break;
-    case 'PE': converted = 'Pernambuco'; break;
-    case 'PI': converted = 'Piauí'; break;
-    case 'RJ': converted = 'Rio de Janeiro'; break;
-    case 'RN': converted = 'Rio Grande do Norte'; break;
-    case 'RS': converted = 'Rio Grande do Sul'; break;
-    case 'RO': converted = 'Rondônia'; break;
-    case 'RR': converted = 'Rorâima'; break;
-    case 'SC': converted = 'Santa Catarina'; break;
-    case 'SP': converted = 'São Paulo'; break;
-    case 'SE': converted = 'Sergipe'; break;
-    case 'TO': converted = 'Tocântins'; break;
-    case 'ST': converted = 'STATEHGFHG'; break;
-    default: converted = undefined; break;
-  }
-  return converted;
-}
-
-function User(session: string): Promise<UserType> {
+function User(session: string): Promise<UserModel> {
   return useAxios(session).get(BU_PRELOAD_USER)
     .then(preload => new ExtractableString(preload.data))
     .then(preload => ({
@@ -137,22 +59,16 @@ function User(session: string): Promise<UserType> {
           const complment = info.splice(-2, 1)[0];
           return {
             cep: parseInt(address[4].part('>', '<').toString()),
-            state: {
-              acromn: state.toString(),
-              name: parseAddressState(state.toString())
-            },
-            type: {
-              acromn: type.toString(),
-              name: parseAddressType(type.toString())
-            },
+            state: parseAddressStateAcronym(state.toString()),
             city: address[3].part('>', ',').toName().toString(),
             district: info.splice(-1)[0].toName().toString(),
             street: new ExtractableString(street).toName().toString(),
             number: number.length ? parseInt(number) : 0,
+            type: type.toString() as 'RES'|'COM'|'Particular',
             complement: complment.length ? complment.toName().toString() : undefined
-          } as UserAddressType;
+          } as Address;
         })
-      } as UserType;
+      } as UserModel;
     });
 }
 

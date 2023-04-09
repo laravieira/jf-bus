@@ -31,6 +31,12 @@ function downloadPDF(session: string, owner: number, number: number, status: num
     ))
 }
 
+/** Download a Billet of an order and call the phone share feature
+ * @param session The key of a valid logged session
+ * @param owner Order owner id (account manager)
+ * @param number It's the unique incremental number per user account
+ * @param status Order status [1=New, 2=Canceled, 3=Done, 4=CanceledAfterDone]
+ */
 function requestFile(session: string, owner: number, number: number, status: number) {
   return downloadPDF(session, owner, number, status)
     // Call sharing pop-up to share the pdf

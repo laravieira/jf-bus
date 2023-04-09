@@ -26,10 +26,11 @@ import { Page } from './Page.model';
  * @property {number} iss Card's iss number (first part of card's number)
  * @property {number} id Card's riid number (second part of card's number)
  * @property {number} srn Card's srn number (third part of card's number)
- * @prop {CardDesign} design Card's design name and code
- * @prop {string} status Card's status ["Ativo", "Inativo", "Demitido"]
- * @prop {CardBillet} billet Card's billet ids (only used on billet creation)
- * @prop {Page<CardOrder>} orders Card's order history
+ * @property {Date} [createdAt] When the card was created
+ * @property {CardDesign} [design] Card's design name and code
+ * @property {string} [status] Card's status ["Ativo", "Inativo", "Demitido"]
+ * @property {CardBillet} [billet] Card's billet ids (only used on billet creation)
+ * @property {Page<CardOrder>} [orders] Card's order history
  */
 
 /** @type {CardDesign} */

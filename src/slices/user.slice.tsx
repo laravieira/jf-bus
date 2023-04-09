@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import Login, { LoginType } from '../handlers/Login.handler';
+import Login from '../handlers/Login.handler';
+import { LoginState } from '../models/LoginState.model';
 
-const initialState: LoginType = {
+const initialState: LoginState = {
   logged: false,
   loading: false,
   session: null,
@@ -34,7 +35,7 @@ const user = createSlice({
 export const userLogin = createAsyncThunk('user/login', (
   login: { user?: string, password?: string, keep?: boolean },
   { getState }
-): Promise<LoginType> => {
+): Promise<LoginState> => {
   const { user, password, keep } = login;
   const { user: { logged } } = getState() as RootState;
 

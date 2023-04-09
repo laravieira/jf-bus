@@ -4,10 +4,10 @@ import {
   BU_PATH_RECEIPT,
   BU_PRELOAD_RECEIPT,
 } from '../constants';
-import { ExtractableString } from '../utils';
 import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { deleteAsync, moveAsync } from 'expo-file-system';
+import { ExtractableString } from '../utils/ExtractableString.util';
 
 function Receipt(session: string, owner: number, number: number, status: number): Promise<void> {
   const query = new URLSearchParams({

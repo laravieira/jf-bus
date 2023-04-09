@@ -1,6 +1,6 @@
 import useAxios from '../hooks/useAxios.hook';
 import { BU_PATH_ORDERS, BU_PRELOAD_ORDERS } from '../constants';
-import { ExtractableString } from '../utils';
+import { ExtractableString } from '../utils/ExtractableString.util';
 
 export type Order = {
   id: number,

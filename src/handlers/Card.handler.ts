@@ -4,38 +4,23 @@ import {
   BU_PATH_CARD_ORDERS,
   BU_PRELOAD_CARD,
 } from '../constants';
-import { ExtractableString } from '../utils';
+import { ExtractableString } from '../utils/ExtractableString.util';
+import { parseCardNumber } from '../utils/parseCardNumber.util';
+import { Card as CardModel, CardOrder } from '../models/Card.model';
+import { parsePage } from '../utils/parsePage.util';
 
-type CardOrderType = {
-  id: number,
-  credit: number,
-  status: string,
-  charge: string
-};
-
-type CardOrderPageType = {
-  orders: CardOrderType[],
-  current: number,
-  pages: number,
-  total: number
-};
-
-type CardType = {
-  number: string,
-  status: string,
-  iss: number,
-  id: number,
-  snr: number,
-  orders: CardOrderPageType
-};
-
-function Card(session: string, number: string, page: number = 1): Promise<CardType> {
-  const numbers = new ExtractableString(number).part(null, '-').split('.');
+/** Returns the card basic data and the orders history of the card
+ * @param session The key of a valid logged session
+ * @param number The card number, as printed on the physical card, like "99.99.99999999-9"
+ * @param [page=1] Page of the orders history
+ */
+function Card(session: string, number: string, page: number = 1): Promise<CardModel> {
+  const numbers = parseCardNumber(number);
 
   const query = new URLSearchParams({
-    'ISS_ID': numbers[0].toString(),
-    'CD_ID': numbers[1].toString(),
-    'CRD_SNR': numbers[2].toString(),
+    'ISS_ID': `${numbers[0]}`,
+    'CD_ID': `${numbers[1]}`,
+    'CRD_SNR': `${numbers[2]}`,
   });
 
   const pageQuery = new URLSearchParams({
@@ -59,30 +44,26 @@ function Card(session: string, number: string, page: number = 1): Promise<CardTy
       } as { card: ExtractableString, orders: ExtractableString };
     })
     .then(data => {
-      const pages = data.orders.part('page_CallBack', ')').split(',');
-
       return {
-      number: data.card.mpart('lblCard', '><b>', '<').toString(),
-      status: data.card.mpart('lblStatus', '><b>', '<').toString(),
-      iss: parseInt(numbers[0].toString()),
-      id: parseInt(numbers[1].toString()),
-      snr: parseInt(numbers[2].toString()),
-      orders: {
-        orders: data.orders.part('<table', '</table>').split('GridLinha').splice(1).map(data => {
-          const order = data.split('<td');
+        number: data.card.mpart('lblCard', '><b>', '<').toString(),
+        status: data.card.mpart('lblStatus', '><b>', '<').toString(),
+        iss: numbers[0],
+        id: numbers[1],
+        snr: numbers[2],
+        orders: parsePage<CardOrder>(
+          data.orders,
+          data.orders.part('<table', '</table>').split('GridLinha').splice(1).map(data => {
+            const order = data.split('<td');
 
-          return {
-            id: parseInt(order[1].part('>', '<').toString()),
-            credit: order[2].part('>', '<').toPrice(),
-            status: order[3].part('>', '<').toString(),
-            charge: order[4].part('>', '<').toString()
-          } as CardOrderType;
-        }),
-        current: parseInt(pages[pages.length-3].part('\'', '\'').toString()),
-        pages: parseInt(pages[pages.length-2].part('\'', '\'').toString()),
-        total: parseInt(pages[pages.length-1].part('\'', '\'').toString())
-      } as CardOrderPageType
-    } as CardType;
+            return {
+              id: parseInt(order[1].part('>', '<').toString()),
+              credit: order[2].part('>', '<').toPrice(),
+              status: order[3].part('>', '<').toString(),
+              charge: order[4].part('>', '<').toString()
+            } as CardOrder;
+          })
+        ),
+      } as CardModel;
     });
 }
 

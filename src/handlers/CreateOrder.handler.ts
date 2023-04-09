@@ -5,10 +5,12 @@ import {
   BU_BILLET_CREATE_VALUE, BU_PRELOAD_BILLET_CREATE
 } from '../constants';
 
-import { ExtractableString, parseCardNumber, parsePage } from '../utils';
+import { ExtractableString } from '../utils/ExtractableString.util';
 import { Card } from '../models/Card.model';
 import { Page } from '../models/Page.model';
 import { CreatedOrder } from '../models/CreatedOrder.model';
+import { parsePage } from '../utils/parsePage.util';
+import { parseCardNumber } from '../utils/parseCardNumber.util';
 
 function getAvailableCards(session: string, order: number, page: number): Promise<Page<Card>> {
   const query = new URLSearchParams({
@@ -71,7 +73,7 @@ async function getCardToRecharge(session: string, card: Card, order: number): Pr
  * @param {string} session The key of a valid logged session
  * @param {Card} card The card to be recharged (design data is required to be defined)
  * @param {number} value The amount of money to recharge into the card
- * @return {CreatedOrder} The data the created billet
+ * @return {CreatedOrder} The basic data of the created billet
  */
 function CreateOrder(session: string, card: Card, value: number): Promise<CreatedOrder> {
   return useAxios(session).get(BU_PRELOAD_BILLET_CREATE)

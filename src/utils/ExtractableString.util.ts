@@ -1,6 +1,18 @@
-import { Page } from './models/Page.model';
-
+/**
+ * ExtractableString extends String class, not the string type.
+ * For more info on the extra functions see:
+ * [laravieira/Scraping](https://github.com/laravieira/Scraping#global-functions)
+ *
+ * - toName ([upname](https://github.com/laravieira/Scraping#upname)): Format and return string to name formats (first each word character is uppercase)
+ * - toPrice ([price](https://github.com/laravieira/Scraping#price)): Return float value of and price string of type 'xx$: 9.999,99'
+ * - removeAccents ([accents](https://github.com/laravieira/Scraping#accents)): Replace accentuation with equivalent characters
+ * - part ([strpart](https://github.com/laravieira/Scraping#strpart)): Return middle string between start and end strings
+ * - mpart ([strmpart](https://github.com/laravieira/Scraping#strmpart)): Return middle string between start2 and end string, which start2 is after start1
+ */
 export class ExtractableString extends String {
+  /** Format and return string to name formats (first each word character is uppercase)
+   * Clone of [upname](https://github.com/laravieira/Scraping#upname).
+   */
   toName(): ExtractableString {
     return new ExtractableString(
       this.trimEnd().split(' ').reduce((name, word) => {
@@ -14,6 +26,9 @@ export class ExtractableString extends String {
     );
   }
 
+  /** Return float value of and price string of type 'xx$: 9.999,99'
+   * Clone of [price](https://github.com/laravieira/Scraping#price).
+   */
   toPrice(): number {
     const string = this.toString();
     return parseFloat(string
@@ -23,6 +38,9 @@ export class ExtractableString extends String {
     )
   }
 
+  /** Replace accentuation with equivalent characters
+   * Clone of [accents](https://github.com/laravieira/Scraping#accents).
+   */
   removeAccents(): ExtractableString {
     const REPLACE_FROM = 'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     const REPLACE_TO = 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
@@ -64,6 +82,9 @@ export class ExtractableString extends String {
     );
   }
 
+  /** Return middle string between start and end strings
+   * Clone of [strpart](https://github.com/laravieira/Scraping#strpart).
+   */
   part(begin: string|null, end?: string, keep_begin: boolean = false): ExtractableString {
     let string = this.toString();
     string = begin?.length ? string.slice(string.indexOf(begin)) : string;
@@ -73,33 +94,13 @@ export class ExtractableString extends String {
     return new ExtractableString(string);
   }
 
+  /** Return middle string between start2 and end string, which start2 is after start1
+   * Clone of [strmpart](https://github.com/laravieira/Scraping#strmpart).
+   */
   mpart(from: string, begin: string, end?: string, keep_begin: boolean = false): ExtractableString {
     let string = this.toString();
     string = from.length ? string.slice(string.indexOf(from)) : string;
 
     return new ExtractableString(string).part(begin, end, keep_begin);
-  }
-}
-
-export function parseCardNumber(number: ExtractableString|string): number[] {
-  if(typeof number === 'string')
-    number = new ExtractableString(number);
-  const value = number.part(null, '-').split('.');
-
-  return [
-    parseInt(value[0].toString()),
-    parseInt(value[1].toString()),
-    parseInt(value[2].toString()),
-  ];
-}
-
-export function parsePage<T>(data: ExtractableString, items: T[], delimiter: string = '\''): Page<T> {
-  const pages = data.part('page_CallBack', '</script>').split(',');
-
-  return {
-    items,
-    current: parseInt(pages[pages.length - 3].part(delimiter, delimiter).toString()),
-    pages: parseInt(pages[pages.length - 2].part(delimiter, delimiter).toString()),
-    total: parseInt(pages[pages.length - 1].part(delimiter, delimiter).toString())
   }
 }

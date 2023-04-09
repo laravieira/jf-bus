@@ -9,20 +9,8 @@ import {
   BU_STORE_USER
 } from '../constants';
 import useAxios from '../hooks/useAxios.hook';
-
-export type Login = {
-  user: string,
-  password: string,
-  keep?: boolean
-}
-
-export type LoginType = {
-  logged: boolean,
-  loading: boolean,
-  session: string|null,
-  user: string|null,
-  autoLogged: boolean
-};
+import { Login as LoginModel } from '../models/Login.model';
+import { LoginState } from '../models/LoginState.model';
 
 function saveUser(user: string, password: string): void {
   Promise.all([
@@ -38,7 +26,7 @@ function unsaveUser(): void {
   ]).catch(console.warn);
 }
 
-function restoreUser(): Promise<Login> {
+function restoreUser(): Promise<LoginModel> {
   return Promise.all([
     getItemAsync(BU_STORE_USER),
     getItemAsync(BU_STORE_PASSWORD)
@@ -47,12 +35,12 @@ function restoreUser(): Promise<Login> {
       return {
         user: credentials[0],
         password: credentials[1]
-      } as Login;
+      } as LoginModel;
     return Promise.reject();
   });
 }
 
-function loginUser(user: string, password: string, keep?: boolean): Promise<LoginType> {
+function loginUser(user: string, password: string, keep?: boolean): Promise<LoginState> {
   const query = new URLSearchParams({
     doc: user,
     pass: password
@@ -78,22 +66,33 @@ function loginUser(user: string, password: string, keep?: boolean): Promise<Logi
         logged,
         user,
         autoLogged: typeof keep === 'undefined'
-      } as LoginType;
+      } as LoginState;
     });
 }
 
+/** Destroy session and deleted saved credentials
+ * @param session The key of a valid logged session
+ */
 function logoutUser(session: string): Promise<void> {
   return CookieManager.clearAll()
     .then(unsaveUser)
     .then(() => useAxios(session).get(`${BU_PATH_LOGOUT}`))
 }
 
+/** Validate if user is logged
+ * @param session The key of a valid logged session
+ */
 function isLogged(session: string): Promise<boolean> {
   return useAxios(session).get(BU_PATH_ISLOGGED)
     .then(data => data.data.includes('wfm_default.aspx'));
 }
 
-function login(user?: string, password?: string, keep?: boolean): Promise<LoginType> {
+/** Try to log in a new user
+ * @param user The only number CPF to login
+ * @param password The password to login
+ * @param [keep] If auto login will be enabled (save credentials and auto login whenever is needed)
+ */
+function login(user?: string, password?: string, keep?: boolean): Promise<LoginState> {
   if(user && password)
     return loginUser(user, password, keep);
   else
@@ -105,7 +104,7 @@ function login(user?: string, password?: string, keep?: boolean): Promise<LoginT
         logged: false,
         user: null,
         autoLogged: typeof keep === 'undefined'
-      } as LoginType));
+      } as LoginState));
 }
 
 const Login = {
