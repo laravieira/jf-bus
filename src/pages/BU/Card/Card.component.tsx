@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN, ROUTE_BU_CARD } from '../../../constants';
 import { StyleSheet } from 'react-native';
-import Owner, { OwnerType } from '../../../handlers/Owner.handler';
+import Owner from '../../../handlers/Owner.handler';
+import { Owner as OwnerModel } from '../../../models/Owner.model';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { RootParamsList } from '../../../navigation/Navigation.config';
 
@@ -15,7 +16,7 @@ function Card({ route: { params } }: CardProps) {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
-  const [card, setCard] = useState<OwnerType|null>(null);
+  const [card, setCard] = useState<OwnerModel|null>(null);
 
   useEffect(() => {
     if(!logged)

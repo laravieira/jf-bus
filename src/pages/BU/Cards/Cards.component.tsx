@@ -6,13 +6,15 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
 import Line from '../../../components/Line';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import Owners, { Owner, OwnersPage } from '../../../handlers/Owners.handler';
+import Owners from '../../../handlers/Owners.handler';
 import Card from '../../../components/Card';
+import { Page } from '../../../models/Page.model';
+import { Owner } from '../../../models/Owner.model';
 
 function Cards() {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
-  const [page, setPage] = useState<OwnersPage>({ current: 0, total: 0, pages: 1, owners: []});
+  const [page, setPage] = useState<Page<Owner>>({ current: 0, total: 0, pages: 1, items: []});
   const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<Owner[]>([]);
 
@@ -32,11 +34,11 @@ function Cards() {
     setLoading(true);
     Owners(session ?? '', page.current+1)
       .then(page => {
-        setCards([...cards, ...page.owners])
+        setCards([...cards, ...page.items])
         return page;
       })
       .then(page => {
-        setPage({...page, owners: []})
+        setPage({...page, items: []})
         return page;
       })
       .catch(console.warn)
@@ -60,7 +62,7 @@ function Cards() {
   }
 
   function renderCard(owner: Owner) {
-    return <Card owner={owner} style={styles.card} showHome/>;
+    return <Card card={owner.card} style={styles.card} showHome/>;
   }
 
   function renderItem({ item: owner, index }: ListRenderItemInfo<Owner>) {

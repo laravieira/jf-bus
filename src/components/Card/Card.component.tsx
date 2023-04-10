@@ -9,13 +9,13 @@ import { IconProps } from '../Navbar/NavbarIcon.component';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { setQuickCard } from '../../slices/quickCard.slice';
-import { Owner } from '../../handlers/Owners.handler';
+import { Card as CardModel } from '../../models/Card.model';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTE_BU_CARD } from '../../constants';
 import CardHandler from '../../handlers/Card.handler';
 
 type CardProps = {
-  owner: Owner,
+  card: CardModel,
   showLock?: boolean,
   showHome?: boolean,
   showRecharge?: boolean,
@@ -25,20 +25,24 @@ type CardProps = {
 
 function Card(props: CardProps) {
   const {
-    owner,
+    card,
     showLock,
     showHome,
     showRecharge,
     showDetails,
     style
   } = props;
-  const { card } = useAppSelector(state => state.quickCard);
+  const { card: quickCard } = useAppSelector(state => state.quickCard);
   const { session } = useAppSelector(state => state.user);
   const { navigate } = useNavigation();
   const dispatch = useAppDispatch();
 
   function onPressHome() {
-    dispatch(setQuickCard(owner))
+    dispatch(setQuickCard({
+      session: session ?? '',
+      owner: card.owner,
+      card: card.number
+    }))
   }
 
   function onPressLock() {
@@ -46,14 +50,14 @@ function Card(props: CardProps) {
   }
 
   function onPressRecharge() {
-    CardHandler(session ?? '', owner.card.number)
-      .then(card => console.debug(card.orders.orders))
+    CardHandler(session ?? '', card.number)
+      .then(card => console.debug(card.orders?.items))
       .catch(console.warn)
   }
 
   function onPressDetails() {
     // @ts-ignore
-    navigate({ name: ROUTE_BU_CARD, params: { owner }});
+    navigate({ name: ROUTE_BU_CARD, params: { owner: card.owner }});
   }
 
   function renderButton(icon: (props: IconProps) => JSX.Element, onPress: () => void) {
@@ -62,8 +66,8 @@ function Card(props: CardProps) {
 
   function renderButtons() {
     return <View style={styles.buttons}>
-      { showHome ? renderButton(card?.card.number === owner.card.number ? HomeSolidIcon : HomeIcon, onPressHome) : null }
-      { showLock ? renderButton(owner.card.status === 'Ativo' ? LockOpenIcon : LockClosedIcon, onPressLock) : null }
+      { showHome ? renderButton(quickCard?.number === card.number ? HomeSolidIcon : HomeIcon, onPressHome) : null }
+      { showLock ? renderButton(card.status === 'Ativo' ? LockOpenIcon : LockClosedIcon, onPressLock) : null }
       { showRecharge ? renderButton(BanknotesIcon, onPressRecharge) : null }
       { showDetails ? renderButton(ListBulletIcon, onPressDetails) : null }
     </View>;
@@ -72,8 +76,8 @@ function Card(props: CardProps) {
   return <View style={[styles.card, style]}>
     <Image source={BilheteUnico} style={styles.image}/>
     <View style={styles.details}>
-      <Text>{ owner.name }</Text>
-      <Text>{ owner.card.number }</Text>
+      <Text>{ card.name }</Text>
+      <Text>{ card.number }</Text>
     </View>
     { renderButtons() }
   </View>;

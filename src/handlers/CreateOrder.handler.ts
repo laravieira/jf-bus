@@ -87,7 +87,7 @@ function CreateOrder(session: string, card: Card, value: number): Promise<Order>
       __EVENTVALIDATION: content.mpart('__EVENTVALIDATION', 'value="', '"').toString(),
       hidBasedOnBalance: content.mpart('hidBasedOnBalance', 'value="', '"').toString(),
       cboPedType: BU_BILLET_CREATE_MODE,
-      cboApps: `${card.design?.code};${card.iss}`,
+      cboApps: `${card.design};${card.iss}`,
       btnNext: content.mpart('btnNext', 'value="', '"').toString()
     }))
     .then(body => useAxios(session).post(BU_BILLET_CREATE, body))

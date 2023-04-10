@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Owner } from '../handlers/Owners.handler';
 import { RootState } from '../store';
 import QuickCard from '../handlers/QuickCard.handler';
+import { Card } from '../models/Card.model';
+import Owner from '../handlers/Owner.handler';
 
 type QuickCardState = {
-  card: Owner|null
+  card: Card|null
 };
 
 const initialState: QuickCardState = {
@@ -21,18 +22,23 @@ const quickCard = createSlice({
 });
 
 export const setQuickCard = createAsyncThunk('quick-card/set', (
-  onwer: Owner,
+  data: {
+    session: string,
+    owner: number,
+    card: string
+  },
   { getState }
 ): Promise<QuickCardState> => {
   const { quickCard: { card: state } } = getState() as RootState;
-  const { card: { number } } = onwer;
+  const { session, owner, card: number } = data;
 
-  if(number === state?.card.number)
+  if(number === state?.number)
     return QuickCard.unsaveCard()
       .then(() => ({ card: null }));
 
-  return QuickCard.saveCard(onwer)
-    .then(() => ({ card: onwer }))
+  return Owner(session, owner)
+    .then(({ card }) => QuickCard.saveCard(card))
+    .then(card => ({ card }))
 });
 
 export const loadQuickCard = createAsyncThunk('quick-card/load', (
@@ -44,7 +50,7 @@ export const loadQuickCard = createAsyncThunk('quick-card/load', (
   if(card)
     return Promise.reject();
   return QuickCard.restoreCard()
-    .then(owner => ({ card: owner }));
+    .then(card => ({ card }));
 });
 
 export default quickCard.reducer;

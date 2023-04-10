@@ -23,7 +23,7 @@ export type AddressAcronym = {
 
 /** @type Address */
 export type Address = {
-  id: number,
+  id?: number,
   cep: number,
   state: AddressAcronym,
   city: string,

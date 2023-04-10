@@ -6,12 +6,12 @@ import Card from '../../../components/Card';
 import Menu from '../../../components/Menu';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 'react-native-heroicons/outline';
-import { Owner } from '../../../handlers/Owners.handler';
+import { Card as CardModel } from '../../../models/Card.model';
 import { Order as OrderModel } from '../../../models/Order.model';
 import Order from '../../../components/Order';
 
 type MainComponentProps = {
-  card: Owner|null,
+  card: CardModel|null,
   orders: OrderModel[],
   onPageAccount: () => void,
   onPageRecharges: () => void,
@@ -40,7 +40,7 @@ function MainComponent(props: MainComponentProps) {
 
   function renderQuickCard() {
     return <View style={styles.quickcard}>
-      { card ? <Card owner={card} showDetails showRecharge/> : <Card.Empty/> }
+      { card ? <Card card={card} showDetails showRecharge/> : <Card.Empty/> }
     </View>;
   }
 

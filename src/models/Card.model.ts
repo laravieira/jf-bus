@@ -1,11 +1,6 @@
 import { Page } from './Page.model';
 import { OrderStatus } from './Order.model';
 
-/** @typedef {object} CardDesign The card design data
- * @property {string} name Design name
- * @property {number} code Deisgn code [400, 570]
- */
-
 /** @typedef {object} CardBillet The card billet ids
  * @property {number} user PRVID: Manager account id
  * @property {number} key RIID: Special card's owner id (worker special id)
@@ -34,11 +29,12 @@ import { OrderStatus } from './Order.model';
  * @property {Page<CardOrder>} [orders] Card's order history
  */
 
-/** @type {CardDesign} */
-export type CardDesign = {
-  name: string,
-  code: number
-};
+export enum CardDesign {
+  TRANSPORT_TICKET = 400,
+  COMMON = 9,
+  BILLHETE_UNICO = 570,
+  UNKNOW = -1
+}
 
 /** @type {CardBillet} */
 export type CardBillet = {

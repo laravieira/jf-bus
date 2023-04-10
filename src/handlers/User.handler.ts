@@ -5,6 +5,9 @@ import { User as UserModel } from '../models/User.model';
 import { Address } from '../models/Address.model';
 import { ExtractableString } from '../utils/ExtractableString.util';
 
+/** Returns User (Account manager) details data
+ * @param session The key of a valid logged session
+ */
 function User(session: string): Promise<UserModel> {
   return useAxios(session).get(BU_PRELOAD_USER)
     .then(preload => new ExtractableString(preload.data))
