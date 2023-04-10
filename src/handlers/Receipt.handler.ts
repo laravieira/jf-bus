@@ -8,12 +8,17 @@ import { printToFileAsync } from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { deleteAsync, moveAsync } from 'expo-file-system';
 import { ExtractableString } from '../utils/ExtractableString.util';
+import { Order as OrderModel } from '../models/Order.model';
 
-function Receipt(session: string, owner: number, number: number, status: number): Promise<void> {
+/** Gets the order receipt and call the phone share feature
+ * @param session The key of a valid logged session
+ * @param order Order object, has to conteins order owner id, order number and order status.
+ */
+function Receipt(session: string, order: OrderModel): Promise<void> {
   const query = new URLSearchParams({
-    'PRV_ID': `${owner}`,
-    'ROM_TRANID': `${number}`,
-    'ROM_SEQNBR': `${status}`
+    'PRV_ID': `${order.owner}`,
+    'ROM_TRANID': `${order.number}`,
+    'ROM_SEQNBR': `${order.status}`
   });
 
   return useAxios(session).get(BU_PRELOAD_RECEIPT)

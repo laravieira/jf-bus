@@ -8,9 +8,9 @@ import {
 import { ExtractableString } from '../utils/ExtractableString.util';
 import { Card } from '../models/Card.model';
 import { Page } from '../models/Page.model';
-import { CreatedOrder } from '../models/CreatedOrder.model';
 import { parsePage } from '../utils/parsePage.util';
 import { parseCardNumber } from '../utils/parseCardNumber.util';
+import { Order } from '../models/Order.model';
 
 function getAvailableCards(session: string, order: number, page: number): Promise<Page<Card>> {
   const query = new URLSearchParams({
@@ -73,9 +73,9 @@ async function getCardToRecharge(session: string, card: Card, order: number): Pr
  * @param {string} session The key of a valid logged session
  * @param {Card} card The card to be recharged (design data is required to be defined)
  * @param {number} value The amount of money to recharge into the card
- * @return {CreatedOrder} The basic data of the created billet
+ * @return {Order} The basic data of the created order, including the service name.
  */
-function CreateOrder(session: string, card: Card, value: number): Promise<CreatedOrder> {
+function CreateOrder(session: string, card: Card, value: number): Promise<Order> {
   return useAxios(session).get(BU_PRELOAD_BILLET_CREATE)
 
     // 1° step: collect validators, set mode, set card design/iss
@@ -165,7 +165,7 @@ function CreateOrder(session: string, card: Card, value: number): Promise<Create
           `${date[2].toString()}-${date[1].toString()}-${date[0].toString()}T00:00:00.000-03:00`
         )),
         service: data.mpart('lblService', '>', '<').toName().toString()
-      } as CreatedOrder
+      } as Order
     })
 }
 

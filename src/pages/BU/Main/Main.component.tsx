@@ -7,12 +7,12 @@ import Menu from '../../../components/Menu';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 'react-native-heroicons/outline';
 import { Owner } from '../../../handlers/Owners.handler';
-import { Order as OrderType } from '../../../handlers/Orders.handler';
+import { Order as OrderModel } from '../../../models/Order.model';
 import Order from '../../../components/Order';
 
 type MainComponentProps = {
   card: Owner|null,
-  orders: OrderType[],
+  orders: OrderModel[],
   onPageAccount: () => void,
   onPageRecharges: () => void,
   onPageCards: () => void,
@@ -44,7 +44,7 @@ function MainComponent(props: MainComponentProps) {
     </View>;
   }
 
-  function renderOrder(order: OrderType) {
+  function renderOrder(order: OrderModel) {
     return <Order key={order.id} order={order} />;
   }
 

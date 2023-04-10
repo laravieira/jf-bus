@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, ViewStyle } from 'react-native';
-import { Order as OrderType } from '../../handlers/Orders.handler';
+import { Order as OrderModel, OrderStatus } from '../../models/Order.model';
 import { PAGE_HORIZONTAL_PADDING } from '../PageContainer/PageContainer.config';
 import Text from '../Text';
 import {
@@ -12,7 +12,7 @@ import {
 } from 'react-native-heroicons/outline';
 
 type OrderComponentProps = {
-  order: OrderType,
+  order: OrderModel,
   style?: ViewStyle,
   onDetails: () => void,
   onShare: () => void,
@@ -26,26 +26,26 @@ function Order(props: OrderComponentProps) {
   const { style, onDetails } = props;
 
   function renderStatus(status: number) {
-    if(status === 1)
+    if(status === OrderStatus.NEW)
       return <><SwatchIcon size={18} color="#1F5FF3"/><Text>New</Text></>;
-    if(status === 2 || status === 4)
+    if(status === OrderStatus.CANCELED)
       return <><ArchiveBoxXMarkIcon size={18} color="#BE3333"/><Text>Canceled</Text></>;
-    if(status === 3)
+    if(status === OrderStatus.DONE)
       return <><CheckIcon size={18} color="#00A72F"/><Text>Done</Text></>;
     return <><FaceFrownIcon size={18} color="#FFF"/><Text>Unknow</Text></>;
   }
 
   function renderDetails() {
-    const { order: { id, status, price, date } } = props;
+    const { order: { id, status, value, createdAt } } = props;
 
     return <View>
       <Text style={styles.id}>{ id }</Text>
       <Text.Bold>Status</Text.Bold>
       <View style={styles.line}>
         <View style={styles.status}>{ renderStatus(status) }</View>
-        <Text>{ `created at ${date.toLocaleDateString('pt-br')}` }</Text>
+        <Text>{ `created at ${createdAt.toLocaleDateString('pt-br')}` }</Text>
       </View>
-      <Text.H2 style={styles.price}>{ `R$: ${price.toFixed(2)}` }</Text.H2>
+      <Text.H2 style={styles.price}>{ `R$: ${value.toFixed(2)}` }</Text.H2>
     </View>;
   }
 

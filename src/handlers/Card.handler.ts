@@ -8,6 +8,7 @@ import { ExtractableString } from '../utils/ExtractableString.util';
 import { parseCardNumber } from '../utils/parseCardNumber.util';
 import { Card as CardModel, CardOrder } from '../models/Card.model';
 import { parsePage } from '../utils/parsePage.util';
+import { parseOrderStatus } from '../utils/parseOrderStatus.util';
 
 /** Returns the card basic data and the orders history of the card
  * @param session The key of a valid logged session
@@ -58,7 +59,7 @@ function Card(session: string, number: string, page: number = 1): Promise<CardMo
             return {
               id: parseInt(order[1].part('>', '<').toString()),
               credit: order[2].part('>', '<').toPrice(),
-              status: order[3].part('>', '<').toString(),
+              status: parseOrderStatus(order[3].part('>', '<').toString()),
               charge: order[4].part('>', '<').toString()
             } as CardOrder;
           })

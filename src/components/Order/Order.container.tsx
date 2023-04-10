@@ -1,4 +1,4 @@
-import { Order as OrderType } from '../../handlers/Orders.handler';
+import { Order as OrderModel } from '../../models/Order.model';
 import { ViewStyle } from 'react-native';
 import OrderComponent from './Order.component';
 import OrderHandler from '../../handlers/Order.handler';
@@ -7,7 +7,7 @@ import Receipt from '../../handlers/Receipt.handler';
 import Billet from '../../handlers/Billet.handler';
 
 type OrderProps = {
-  order: OrderType,
+  order: OrderModel,
   style?: ViewStyle
 };
 
@@ -15,9 +15,9 @@ function Order(props: OrderProps) {
   const { session } = useAppSelector(state => state.user);
 
   function onDetails() {
-    const { order: { owner, number, status } } = props;
+    const { order } = props;
     console.debug('onDetails');
-    OrderHandler(session ?? '', owner, number, status)
+    OrderHandler(session ?? '', order)
       .then(data => console.debug(data))
       .catch(console.warn)
     //TODO Implement order details page
@@ -29,18 +29,18 @@ function Order(props: OrderProps) {
   }
 
   function onCodeCopy() {
-    const { order: { owner, number, status } } = props;
+    const { order } = props;
     console.debug('onCodeCopy');
     //TODO Implement order auto copy barcode
-    Billet.requestFile(session ?? '', owner, number, status)
+    Billet.requestFile(session ?? '', order)
       .catch(console.warn)
   }
 
   function onDownload() {
-    const { order: { owner, number, status } } = props;
+    const { order } = props;
     console.debug('onDownload');
     //TODO Implement order recipe/bill download
-    Receipt(session ?? '', owner, number, status)
+    Receipt(session ?? '', order)
       .then(data => console.debug(data))
       .catch(console.warn)
   }

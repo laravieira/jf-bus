@@ -1,4 +1,5 @@
 import { Page } from './Page.model';
+import { OrderStatus } from './Order.model';
 
 /** @typedef {object} CardDesign The card design data
  * @property {string} name Design name
@@ -15,8 +16,8 @@ import { Page } from './Page.model';
 /** @typedef {object} CardOrder A card order
  * @property {number} id Order's id
  * @property {number} credit Amount recharged to this card
- * @property {string} status Order's status
- * @property {string} charge Date of recharge
+ * @property {OrderStatus} status Order's status
+ * @property {string} [charge] Card's recharge status
  */
 
 /** @typedef {object} Card The card used on the bus
@@ -25,7 +26,7 @@ import { Page } from './Page.model';
  * @property {number} owner Card's owner id (the worker id)
  * @property {number} iss Card's iss number (first part of card's number)
  * @property {number} id Card's riid number (second part of card's number)
- * @property {number} srn Card's srn number (third part of card's number)
+ * @property {number} snr Card's snr number (third part of card's number)
  * @property {Date} [createdAt] When the card was created
  * @property {CardDesign} [design] Card's design name and code
  * @property {string} [status] Card's status ["Ativo", "Inativo", "Demitido"]
@@ -51,7 +52,7 @@ export type CardBillet = {
 export type CardOrder = {
   id: number,
   credit: number,
-  status: string,
+  status: OrderStatus,
   charge: string
 };
 
@@ -63,6 +64,7 @@ export type Card = {
   iss: number,
   id: number,
   snr: number,
+  createdAt?: Date,
   design?: CardDesign,
   status?: string,
   billet?: CardBillet,

@@ -4,7 +4,7 @@ import { ExtractableString } from './ExtractableString.util';
  * - '11.22.33333333-4' => [11, 22, 33333333]
  * - '01.02.00033333-4' => [1, 2, 33333]
  * @param number The card number with dots and dashes
- * @return An array with iss, id, srn respectively parsed to numbers.
+ * @return An array with iss, id, snr respectively parsed to numbers.
  */
 export function parseCardNumber(number: ExtractableString|string): number[] {
   if(typeof number === 'string')

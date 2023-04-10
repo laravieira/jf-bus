@@ -6,7 +6,8 @@ import { userLogin, userLogout } from '../../../slices/user.slice';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 import MainComponent from './Main.component';
 import { loadQuickCard } from '../../../slices/quickCard.slice';
-import Orders, { Order } from '../../../handlers/Orders.handler';
+import Orders from '../../../handlers/Orders.handler';
+import { Order } from '../../../models/Order.model';
 
 function Main() {
   const { logged, loading, autoLogged, session } = useAppSelector(state => state.user);
@@ -33,7 +34,7 @@ function Main() {
       navigate({ name: ROUTE_BU_LOGIN });
     if(logged && !loading)
       Orders(session ?? '')
-        .then(page => setOrders(page.orders))
+        .then(page => setOrders(page.items))
         .catch(console.warn);
   }
 

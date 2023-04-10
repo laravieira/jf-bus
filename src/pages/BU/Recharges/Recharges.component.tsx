@@ -6,16 +6,18 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
 import Line from '../../../components/Line';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import Orders, { Order as OrderType, OrdersPage } from '../../../handlers/Orders.handler';
+import Orders from '../../../handlers/Orders.handler';
 import Order from '../../../components/Order';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
+import { Order as OrderModel } from '../../../models/Order.model';
+import { Page } from '../../../models/Page.model';
 
 function Recharges() {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
-  const [page, setPage] = useState<OrdersPage>({ current: 0, total: 0, pages: 1, orders: []});
+  const [page, setPage] = useState<Page<OrderModel>>({ current: 0, total: 0, pages: 1, items: []});
   const [loading, setLoading] = useState<boolean>(false);
-  const [orders, setOrders] = useState<OrderType[]>([]);
+  const [orders, setOrders] = useState<OrderModel[]>([]);
 
   useEffect(() => {
     if(!logged)
@@ -33,11 +35,11 @@ function Recharges() {
     setLoading(true);
     Orders(session ?? '', page.current+1)
       .then(page => {
-        setOrders([...orders, ...page.orders])
+        setOrders([...orders, ...page.items])
         return page;
       })
       .then(page => {
-        setPage({...page, orders: []})
+        setPage({...page, items: []})
         return page;
       })
       .catch(console.warn)
@@ -60,11 +62,11 @@ function Recharges() {
     </View>;
   }
 
-  function renderOrder(order: OrderType) {
+  function renderOrder(order: OrderModel) {
     return <Order order={order}/>;
   }
 
-  function renderItem({ item: order, index }: ListRenderItemInfo<OrderType>) {
+  function renderItem({ item: order, index }: ListRenderItemInfo<OrderModel>) {
     return <>
       { !index ? renderHeader() : <></> }
       { renderOrder(order) }
@@ -80,7 +82,7 @@ function Recharges() {
     </View>;
   }
 
-  function keyExtractor(order: OrderType, index: number): string {
+  function keyExtractor(order: OrderModel, index: number): string {
     return `${index}-${order.id}`;
   }
 
