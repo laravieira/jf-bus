@@ -9,6 +9,7 @@ import { parseCardNumber } from '../utils/parseCardNumber.util';
 import { Card as CardModel, CardOrder } from '../models/Card.model';
 import { parsePage } from '../utils/parsePage.util';
 import { parseOrderStatus } from '../utils/parseOrderStatus.util';
+import { parseCardDesign } from '../utils/parseCardDesign.util';
 
 /** Returns the card basic data and the orders history of the card
  * @param session The key of a valid logged session
@@ -49,7 +50,7 @@ function Card(session: string, number: string, page: number = 1): Promise<CardMo
         number: data.card.mpart('lblCard', '><b>', '<').toString(),
         status: data.card.mpart('lblStatus', '><b>', '<').toString(),
         iss: numbers[0],
-        id: numbers[1],
+        design: parseCardDesign(numbers[1]),
         snr: numbers[2],
         orders: parsePage<CardOrder>(
           data.orders,

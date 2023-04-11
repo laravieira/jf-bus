@@ -17,10 +17,6 @@ import { parseCardDesign } from '../utils/parseCardDesign.util';
  * - Class
  * - Daily rated spends
  * - Address
- * - Its card with design defined
- *
- * The card data conteins:
- * - **design** (required to create an order)
  * @param session The key of a valid logged session
  * @param id The owner unique ID
  */
@@ -53,7 +49,6 @@ function Owner(session: string, id: number): Promise<OwnerModel> {
           name,
           owner: id,
           iss: cardData[0],
-          id: cardData[1],
           snr: cardData[2],
           design: parseCardDesign(owner[26].mpart('selected', '>', '<').toString()),
         } as Card,

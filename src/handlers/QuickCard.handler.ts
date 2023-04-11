@@ -3,11 +3,9 @@ import { BU_STORE_QUICKCARD } from '../constants';
 import { Card } from '../models/Card.model';
 
 /** Save Card data on local storage
- * @param card The card object used on the bus (with deisgn data)
+ * @param card The card object used on the bus
  */
 function saveCard(card: Card): Promise<Card> {
-  if(!card.design)
-    return Promise.reject('The card must contein design data, try using Owner handler.');
   return setItemAsync(BU_STORE_QUICKCARD, JSON.stringify(card))
     .then(() => card);
 }

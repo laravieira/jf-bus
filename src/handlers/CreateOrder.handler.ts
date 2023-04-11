@@ -11,6 +11,7 @@ import { Page } from '../models/Page.model';
 import { parsePage } from '../utils/parsePage.util';
 import { parseCardNumber } from '../utils/parseCardNumber.util';
 import { Order } from '../models/Order.model';
+import { parseCardDesign } from '../utils/parseCardDesign.util';
 
 function getAvailableCards(session: string, order: number, page: number): Promise<Page<Card>> {
   const query = new URLSearchParams({
@@ -33,7 +34,7 @@ function getAvailableCards(session: string, order: number, page: number): Promis
           name: data[11].toString(),           // USERNAME
           owner: parseInt(data[5].toString()), // RIID
           iss: parseInt(number[0].toString()),
-          id: parseInt(number[1].toString()),
+          design: parseCardDesign(number[1].toString()),
           snr: parseInt(number[2].toString()),
           billet: {
             user: parseInt(data[7].toString()), // PRVID
@@ -71,7 +72,7 @@ async function getCardToRecharge(session: string, card: Card, order: number): Pr
 /** Create Order Handler
  * Creates a new order to recharge the given card with the given value
  * @param {string} session The key of a valid logged session
- * @param {Card} card The card to be recharged (design data is required to be defined)
+ * @param {Card} card The card to be recharged
  * @param {number} value The amount of money to recharge into the card
  * @return {Order} The basic data of the created order, including the service name.
  */

@@ -20,10 +20,9 @@ import { OrderStatus } from './Order.model';
  * @property {string} name Card's owner full name, as printed on the phisical card
  * @property {number} owner Card's owner id (the worker id)
  * @property {number} iss Card's iss number (first part of card's number)
- * @property {number} id Card's riid number (second part of card's number)
+ * @property {CardDesign} design Card's design number (second part of card's number)
  * @property {number} snr Card's snr number (third part of card's number)
  * @property {Date} [createdAt] When the card was created
- * @property {CardDesign} [design] Card's design name and code
  * @property {string} [status] Card's status ["Ativo", "Inativo", "Demitido"]
  * @property {CardBillet} [billet] Card's billet ids (only used on billet creation)
  * @property {Page<CardOrder>} [orders] Card's order history
@@ -58,10 +57,9 @@ export type Card = {
   name: string, // USERNAME
   owner: number, // USRID
   iss: number,
-  id: number,
+  design: CardDesign,
   snr: number,
   createdAt?: Date,
-  design?: CardDesign,
   status?: string,
   billet?: CardBillet,
   orders?: Page<CardOrder>

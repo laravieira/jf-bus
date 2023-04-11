@@ -10,6 +10,7 @@ import { parsePage } from '../utils/parsePage.util';
 import { Card, CardOrder } from '../models/Card.model';
 import { parseCardNumber } from '../utils/parseCardNumber.util';
 import { Page } from '../models/Page.model';
+import { parseCardDesign } from '../utils/parseCardDesign.util';
 
 /** Return the orders details containing the details values and list of card affected by this order
  *
@@ -103,7 +104,7 @@ function Order(session: string, order: OrderModel, page: number = 1): Promise<Or
             return {
               number: number,
               iss: cardIds[0],
-              id: cardIds[1],
+              design: parseCardDesign(cardIds[1]),
               snr: cardIds[2],
               name: card[1].part('>', '<').toName().toString(),
               owner: 0, // Will be defined on next step
