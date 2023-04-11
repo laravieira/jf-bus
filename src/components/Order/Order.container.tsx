@@ -5,6 +5,9 @@ import OrderHandler from '../../handlers/Order.handler';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import Receipt from '../../handlers/Receipt.handler';
 import Billet from '../../handlers/Billet.handler';
+import { ROUTE_BU_RECHARGE } from '../../constants';
+import { useNavigation } from '@react-navigation/native';
+import CancelOrder from '../../handlers/CancelOrder.handler';
 
 type OrderProps = {
   order: OrderModel,
@@ -13,6 +16,7 @@ type OrderProps = {
 
 function Order(props: OrderProps) {
   const { session } = useAppSelector(state => state.user);
+  const { navigate, setParams } = useNavigation();
 
   function onDetails() {
     const { order } = props;
@@ -46,13 +50,23 @@ function Order(props: OrderProps) {
   }
 
   function onDuplicate() {
-    console.debug('onDuplicate');
-    //TODO Implement order duplicate
+    const { order } = props;
+    // @ts-ignore
+    setParams({
+      data: { ...order, createdAt: undefined }
+    })
+    // @ts-ignore
+    navigate(ROUTE_BU_RECHARGE, {
+      data: { ...order, createdAt: undefined }
+    });
   }
 
   function onCancel() {
-    console.debug('onCancel');
-    //TODO Implement order delete
+    const { order } = props;
+
+    CancelOrder(session ?? '', order)
+      .then(() => alert('Order canceled'))
+      .catch(console.warn);
   }
 
   const orderComponentProps = {

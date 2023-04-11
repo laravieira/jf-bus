@@ -1,34 +1,41 @@
-import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { INPUT_HEIGHT } from './InputField.config';
-import InputFieldMoney from './InputFieldMoney.component';
+import CurrencyInput, { CurrencyInputProps } from 'react-native-currency-input';
 
-type InputFieldProps = {
-  onType: (value: string) => void,
+type InputFieldMoneyProps = {
+  onType: (value: number|null) => void,
   onClear?: () => void,
-  value: string
-} & TextInputProps;
+} & CurrencyInputProps;
 
-function InputField(props: InputFieldProps) {
-  const { value, onType, onClear, style, placeholder } = props;
+function InputFieldMoney(props: InputFieldMoneyProps) {
+  const {
+    value,
+    onType,
+    onClear,
+    style,
+  } = props;
 
-  function renderTextInput() {
-    return <TextInput
-      placeholder={placeholder}
+  function renderMoneyInput() {
+    return <CurrencyInput
+      prefix="R$: "
+      delimiter=""
+      separator="."
+      precision={2}
+      minValue={0}
       placeholderTextColor="rgba(255 255 255 / .8)"
-      onChangeText={onType}
       { ...props }
-      style={styles.input}
-    />;
+      onChangeValue={onType}
+      style={styles.input}/>;
   }
 
   return <View style={[styles.bar, style]}>
-    { renderTextInput() }
+    { renderMoneyInput() }
     <XMarkIcon
       size={32}
       color="rgba(255 255 255 / .6)"
-      style={ value.length ? styles.clear : { display: 'none' }}
-      onPress={() => onClear ? onClear() : onType('')}/>
+      style={ value ? styles.clear : { display: 'none' }}
+      onPress={() => onClear ? onClear() : onType(null)}/>
   </View>;
 }
 
@@ -61,6 +68,4 @@ const styles = StyleSheet.create({
   }
 });
 
-InputField.Money = InputFieldMoney;
-
-export default InputField;
+export default InputFieldMoney;

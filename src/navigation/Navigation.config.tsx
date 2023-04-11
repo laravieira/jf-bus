@@ -16,9 +16,12 @@ import {
   ROUTE_SCHEDULES,
   ROUTE_BU_ACCOUNT,
   ROUTE_BU_RECHARGES,
-  ROUTE_BU_CARDS, ROUTE_BU_CARD, ROUTE_DEFAULT
+  ROUTE_BU_CARDS, ROUTE_BU_CARD, ROUTE_DEFAULT, ROUTE_BU_RECHARGE
 } from '../constants';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { Card } from '../models/Card.model';
+import { Order } from '../models/Order.model';
+import { Owner } from '../models/Owner.model';
 
 type Screen = {
   name: string,
@@ -31,6 +34,7 @@ type Screen = {
 export type RootParamsList = BottomTabScreenProps<{
   [ROUTE_DEFAULT]: undefined,
   [ROUTE_BU_CARD]: { owner: number }
+  [ROUTE_BU_RECHARGE]: { data?: Card|Owner|Order }
 }>
 
 export const SCREENS: Screen[] = [
@@ -75,6 +79,12 @@ export const SCREENS: Screen[] = [
     title: 'BU Account Page',
     icon: UserIcon,
     component: BU.Account,
+    visible: false
+  },{
+    name: ROUTE_BU_RECHARGE,
+    title: 'BU Create Recharge Page',
+    icon: UserIcon,
+    component: BU.Recharge,
     visible: false
   },{
     name: ROUTE_BU_RECHARGES,

@@ -27,7 +27,7 @@ function getAvailableCards(session: string, order: number, page: number): Promis
       data.split('GridLinha').splice(1).map(line => {
         const data = line.mpart('FormataValor', 'ChangeValue(', '"').split('µ');
         const number = parseCardNumber(data[13]);
-        // ChangeValue(µ1µ© µ472192µ© µ513359µ© µ22954µ© document.getElementById(µtext_513359µ).value© µDOUGLAS VIEIRA DE MENEZESµ© µ59.20.00021735-2µ© µ1µ©µlinha513359µ)
+
         return {
           number: data[13].toString(),         // CARDCODE
           name: data[11].toString(),           // USERNAME
@@ -80,18 +80,22 @@ function CreateOrder(session: string, card: Card, value: number): Promise<Order>
 
     // 1° step: collect validators, set mode, set card design/iss
     .then(() => useAxios(session).get(BU_BILLET_CREATE))
-    .then(data => data.data.includes('campoTexto') ? new ExtractableString(data.data) : Promise.reject())
+    .then(data => data.data.includes('campoTexto')
+      ? new ExtractableString(data.data)
+      : Promise.reject('Unable to get first stage.'))
     .then(content => ({
       __VIEWSTATE: content.mpart('__VIEWSTATE', 'value="', '"').toString(),
       __VIEWSTATEGENERATOR: content.mpart('__VIEWSTATEGENERATOR', 'value="', '"').toString(),
       __EVENTVALIDATION: content.mpart('__EVENTVALIDATION', 'value="', '"').toString(),
-      hidBasedOnBalance: content.mpart('hidBasedOnBalance', 'value="', '"').toString(),
+      hidBasedOnBalance: content.mpart('name="hidBasedOnBalance"', 'value="', '"').toString(),
       cboPedType: BU_BILLET_CREATE_MODE,
       cboApps: `${card.design};${card.iss}`,
       btnNext: content.mpart('btnNext', 'value="', '"').toString()
     }))
     .then(body => useAxios(session).post(BU_BILLET_CREATE, body))
-    .then(data => data.data.includes('content_visible') ? new ExtractableString(data.data) : Promise.reject())
+    .then(data => data.data.includes('content_visible')
+      ? new ExtractableString(data.data)
+      : Promise.reject('Unable to send first state data and get second state'))
 
     // 2° step: collect validators of second page
     .then(content => ({
@@ -119,7 +123,7 @@ function CreateOrder(session: string, card: Card, value: number): Promise<Order>
           USRID: `${card.billet?.key}`,
           RIID: `${card.owner}`,
           PRVID: `${card.billet?.user}`,
-          VALUE: `${value}`,
+          VALUE: `${value.toFixed(2)}`.replace('.', ','),
           USERNAME: `${card.name}`,
           CARDCODE: `${card.number}`,
           ID: `${card.billet?.line}`,
@@ -128,7 +132,9 @@ function CreateOrder(session: string, card: Card, value: number): Promise<Order>
 
         return useAxios(session).get(`${BU_BILLET_CREATE_LIST}?${setValueOnCardQuery}`);
       })
-      .then(recharge => recharge.data.includes('CallBackValue') ? query : Promise.reject()))
+      .then(recharge => recharge.data.includes('CallBackValue')
+        ? query
+        : Promise.reject(`Unable to set value on the card ${card.number}.`)))
 
     // 4° step: send second data and go to third page
     .then(body => useAxios(session).post(BU_BILLET_CREATE_VALUE, body))
@@ -144,7 +150,7 @@ function CreateOrder(session: string, card: Card, value: number): Promise<Order>
       __VIEWSTATEGENERATOR: data.mpart('__VIEWSTATEGENERATOR', 'value="', '"').toString(),
       __EVENTVALIDATION: data.mpart('__EVENTVALIDATION', 'value="', '"').toString(),
       hidWait: data.mpart('name="hidWait"', 'value="', '"').toString(),
-      gbi: data.mpart('name="gbi"', 'value="', '"').toString()
+      gbi: 1
     }))
 
     // 6° step: create billet and return basic data about it

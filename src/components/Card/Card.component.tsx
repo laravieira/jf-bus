@@ -11,8 +11,7 @@ import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { setQuickCard } from '../../slices/quickCard.slice';
 import { Card as CardModel } from '../../models/Card.model';
 import { useNavigation } from '@react-navigation/native';
-import { ROUTE_BU_CARD } from '../../constants';
-import CardHandler from '../../handlers/Card.handler';
+import { ROUTE_BU_CARD, ROUTE_BU_RECHARGE } from '../../constants';
 
 type CardProps = {
   card: CardModel,
@@ -50,14 +49,13 @@ function Card(props: CardProps) {
   }
 
   function onPressRecharge() {
-    CardHandler(session ?? '', card.number)
-      .then(card => console.debug(card.orders?.items))
-      .catch(console.warn)
+    // @ts-ignore
+    navigate(ROUTE_BU_RECHARGE, { data: card });
   }
 
   function onPressDetails() {
     // @ts-ignore
-    navigate({ name: ROUTE_BU_CARD, params: { owner: card.owner }});
+    navigate(ROUTE_BU_CARD, { owner: card.owner });
   }
 
   function renderButton(icon: (props: IconProps) => JSX.Element, onPress: () => void) {
