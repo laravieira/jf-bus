@@ -4,13 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
-import Line from '../../../components/Line';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import Orders from '../../../handlers/Orders.handler';
 import Order from '../../../components/Order';
 import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 import { Order as OrderModel } from '../../../models/Order.model';
 import { Page } from '../../../models/Page.model';
+import Header from '../../../components/Header';
 
 function Recharges() {
   const { logged, session } = useAppSelector(state => state.user);
@@ -53,13 +53,13 @@ function Recharges() {
   }
 
   function renderHeader() {
-    return <View key="header" style={styles.header}>
-      <View style={styles.title}>
-        <Text.H3>All Recharges</Text.H3>
-        <Text>{ `${orders.length}/${page.total}` }</Text>
-      </View>
-      <Line style={styles.line}/>
-    </View>;
+    return <Header
+      style={styles.header}
+      length={orders.length}
+      total={page.total}
+      key="header">
+      All Recharges
+    </Header>;
   }
 
   function renderOrder(order: OrderModel) {
@@ -103,15 +103,6 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: PAGE_HORIZONTAL_PADDING
-  },
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end'
-  },
-  line: {
-    marginTop: 8,
-    marginBottom: 24
   },
   footer: {
     paddingVertical: 24,

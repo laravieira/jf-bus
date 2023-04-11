@@ -1,9 +1,9 @@
 import PageContainer from '../../components/PageContainer';
-import Text from '../../components/Text';
+import Header from '../../components/Header';
 
 function Schedule() {
   return <PageContainer>
-    <Text>Schedule</Text>
+    <Header>Schedule</Header>
   </PageContainer>;
 }
 

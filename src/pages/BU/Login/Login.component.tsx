@@ -1,6 +1,5 @@
 import PageContainer from '../../../components/PageContainer';
 import Text from '../../../components/Text';
-import Line from '../../../components/Line';
 import InputField from '../../../components/InputField';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -11,6 +10,7 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 import { userLogin } from '../../../slices/user.slice';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../../../components/Header';
 
 function Login() {
   const { logged, loading, autoLogged } = useAppSelector(state => state.user);
@@ -45,8 +45,7 @@ function Login() {
   }
   
   return <PageContainer>
-    <Text.H3>Bilhete Único</Text.H3>
-    <Line style={styles.smallSpace}/>
+    <Header style={styles.header}>Bilhete Único</Header>
 
     <Text.H5 style={styles.largeSpace}>CPF</Text.H5>
     <InputField style={styles.smallSpace} onType={setUser} value={document} placeholder="123.456.789-01"/>
@@ -61,6 +60,9 @@ function Login() {
 }
 
 const styles = StyleSheet.create({
+  header: {
+    marginBottom: 0
+  },
   largeSpace: {
     marginTop: 32
   },

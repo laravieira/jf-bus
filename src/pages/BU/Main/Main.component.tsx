@@ -1,6 +1,4 @@
 import PageContainer from '../../../components/PageContainer';
-import Text from '../../../components/Text';
-import Line from '../../../components/Line';
 import { StyleSheet, View } from 'react-native';
 import Card from '../../../components/Card';
 import Menu from '../../../components/Menu';
@@ -9,6 +7,7 @@ import { ArrowUturnRightIcon, CreditCardIcon, NewspaperIcon, UserIcon } from 're
 import { Card as CardModel } from '../../../models/Card.model';
 import { Order as OrderModel } from '../../../models/Order.model';
 import Order from '../../../components/Order';
+import Header from '../../../components/Header';
 
 type MainComponentProps = {
   card: CardModel|null,
@@ -40,10 +39,7 @@ function MainComponent(props: MainComponentProps) {
 
   function renderQuickCard() {
     return <View style={styles.quickcard}>
-      <View style={styles.mainCard}>
-        <Text.H3>Main Card</Text.H3>
-        <Line/>
-      </View>
+      <Header>Main Card</Header>
       { card ? <Card card={card} showDetails showRecharge showHome/> : <Card.Empty/> }
     </View>;
   }
@@ -55,10 +51,7 @@ function MainComponent(props: MainComponentProps) {
   function renderOrders() {
     if(orders.length)
     return <>
-      <View style={styles.recharges}>
-        <Text.H3>Last Recharges</Text.H3>
-        <Line/>
-      </View>
+      <Header style={styles.recharges}>Last Recharges</Header>
       { orders.map(renderOrder) }
     </>;
   }
@@ -78,14 +71,8 @@ const styles = StyleSheet.create({
     marginTop: 24,
     paddingHorizontal: PAGE_HORIZONTAL_PADDING
   },
-  mainCard: {
-    gap: 8,
-    marginBottom: 24
-  },
   recharges: {
-    gap: 8,
     marginTop: 32,
-    marginBottom: 24,
     paddingHorizontal: PAGE_HORIZONTAL_PADDING
   }
 });

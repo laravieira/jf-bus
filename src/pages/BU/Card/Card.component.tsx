@@ -3,11 +3,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN, ROUTE_BU_CARD } from '../../../constants';
-import { StyleSheet } from 'react-native';
 import Owner from '../../../handlers/Owner.handler';
 import { Owner as OwnerModel } from '../../../models/Owner.model';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { RootParamsList } from '../../../navigation/Navigation.config';
+import Header from '../../../components/Header';
 
 // @ts-ignore
 type CardProps = BottomTabScreenProps<RootParamsList, ROUTE_BU_CARD>;
@@ -21,7 +21,7 @@ function Card({ route: { params } }: CardProps) {
   useEffect(() => {
     if(!logged)
       // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
+      navigate(ROUTE_BU_LOGIN);
 
     addListener('focus', onPageFocus);
 
@@ -49,27 +49,8 @@ function Card({ route: { params } }: CardProps) {
   }
 
   return <PageContainer.Scroll>
-
+    <Header>Card</Header>
   </PageContainer.Scroll>;
 }
-
-const styles = StyleSheet.create({
-  smallSpace: {
-    marginTop: 8,
-    marginBottom: 24
-  },
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end'
-  },
-  card: {
-    marginBottom: 16
-  },
-  footer: {
-    paddingVertical: 24,
-    alignItems: 'center'
-  }
-});
 
 export default Card;

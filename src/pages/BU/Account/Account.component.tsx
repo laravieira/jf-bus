@@ -4,15 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
-import Line from '../../../components/Line';
-import { StyleSheet } from 'react-native';
+import { User as UserModel } from '../../../models/User.model';
 import User from '../../../handlers/User.handler';
+import Header from '../../../components/Header';
 
 function Account() {
   const { logged, session } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<UserModel>();
 
   useEffect(() => {
     if(!logged)
@@ -35,16 +35,9 @@ function Account() {
   }
 
   return <PageContainer.Scroll>
-    <Text.H3>Account</Text.H3>
-    <Line style={styles.smallSpace}/>
+    <Header>Account</Header>
     <Text>{ user?.name }</Text>
   </PageContainer.Scroll>;
 }
-
-const styles = StyleSheet.create({
-  smallSpace: {
-    marginTop: 8
-  }
-});
 
 export default Account;

@@ -4,12 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_LOGIN } from '../../../constants';
-import Line from '../../../components/Line';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import Owners from '../../../handlers/Owners.handler';
 import Card from '../../../components/Card';
 import { Page } from '../../../models/Page.model';
 import { Owner } from '../../../models/Owner.model';
+import Header from '../../../components/Header';
 
 function Cards() {
   const { logged, session } = useAppSelector(state => state.user);
@@ -52,13 +52,12 @@ function Cards() {
   }
 
   function renderHeader() {
-    return <View key="header">
-      <View style={styles.title}>
-        <Text.H3>All Cards</Text.H3>
-        <Text>{ `${cards.length}/${page.total}` }</Text>
-      </View>
-      <Line style={styles.smallSpace}/>
-    </View>;
+    return <Header
+      length={cards.length}
+      total={page.total}
+      key="header">
+      All Cards
+    </Header>;
   }
 
   function renderCard(owner: Owner) {
@@ -96,15 +95,6 @@ function Cards() {
 }
 
 const styles = StyleSheet.create({
-  smallSpace: {
-    marginTop: 8,
-    marginBottom: 24
-  },
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end'
-  },
   card: {
     marginBottom: 16
   },

@@ -1,11 +1,11 @@
 import PageContainer from '../../../components/PageContainer';
 import { StyleSheet, View } from 'react-native';
 import Text from '../../../components/Text';
-import Line from '../../../components/Line';
 import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
 import Card from '../../../components/Card';
 import { Card as CardModel } from '../../../models/Card.model';
+import Header from '../../../components/Header';
 
 type RechargeProps = {
   value: number|null,
@@ -18,24 +18,24 @@ type RechargeProps = {
 function Recharge(props: RechargeProps) {
   const { value, setValue, create, cards, loading } = props;
 
-  function renderHeader(text: string) {
-    return <View>
-      <Text.H3>{ text }</Text.H3>
-      <Line style={styles.line}/>
+  function renderValueInput() {
+    return <View style={styles.input}>
+      <Text.H5>Value</Text.H5>
+      <InputField.Money
+        value={ value }
+        onType={ setValue }
+        placeholder="R$: 3.10"
+      />
     </View>;
   }
 
-  function renderValueInput() {
-    return <InputField.Money
-      value={ value }
-      onType={ setValue }
-      placeholder="R$: 3.10"
-      style={styles.space}
-    />;
-  }
-
   function renderButton() {
-    return <Button onPress={create} style={styles.space}>Create</Button>;
+    return <Button
+      onPress={create}
+      disabled={loading}
+      style={styles.button}>
+      Create Recharge
+    </Button>;
   }
 
   function renderCard(card: CardModel, key: number) {
@@ -43,20 +43,29 @@ function Recharge(props: RechargeProps) {
   }
 
   return <PageContainer.Scroll>
-    { renderHeader('Recharge') }
+    <Header>Recharge Card</Header>
     { renderValueInput() }
     { renderButton() }
-    { renderHeader(`Card${cards.length?'s':''}`) }
-    { cards.map(renderCard) }
+    <Header>
+      { `Card${cards.length > 1?'s':''}` }
+    </Header>
+    <View style={styles.cards}>
+      { cards.map(renderCard) }
+    </View>
   </PageContainer.Scroll>;
 }
 
 const styles = StyleSheet.create({
-  line: {
-    marginTop: 8
+  input: {
+    marginBottom: 32,
+    gap: 8
   },
-  space: {
-    marginTop: 24
+  button: {
+    marginBottom: 48
+  },
+  cards: {
+    marginBottom: 32,
+    gap: 24
   }
 });
 
