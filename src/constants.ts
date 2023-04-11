@@ -38,7 +38,7 @@ export const BU_PRELOAD_ORDERS        = 'Pages/wfm_Orders_Lst_v2.aspx';
 export const BU_PRELOAD_ORDER         = 'wfm_default.aspx';
 export const BU_PRELOAD_CARD          = 'wfm_default.aspx';
 export const BU_PRELOAD_RECEIPT       = 'wfm_default.aspx';
-export const BU_PRELOAD_BILLET        = 'wfm_default.aspx';
+export const BU_PRELOAD_BILLET        = 'Pages/wfm_Orders_Lst_v2.aspx';
 export const BU_PRELOAD_BILLET_CREATE = 'wfm_default.aspx';
 export const BU_PRELOAD_BILLET_DELETE = 'wfm_default.aspx';
 
