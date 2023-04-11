@@ -7,6 +7,7 @@ import { Card } from '../models/Card.model';
 import { Owner as OwnerModel } from '../models/Owner.model';
 import { parseCardNumber } from '../utils/parseCardNumber.util';
 import { parseCardDesign } from '../utils/parseCardDesign.util';
+import { parseOwnerStatus } from '../utils/parseOwnerStatus.util';
 
 /** Return the owner data, with its own card.
  * The return data conteins:
@@ -54,7 +55,7 @@ function Owner(session: string, id: number): Promise<OwnerModel> {
         } as Card,
         class: owner[18].part('value="', '"').toString(),
         daily: owner[22].part('value="', '"').toPrice(),
-        status: owner[24].mpart('selected', '>', '<').toString(),
+        status: parseOwnerStatus(owner[24].mpart('selected', '>', '<').toString()),
         address: {
           cep: parseInt(owner[29].part('value="', '"').toString()),
           state: parseAddressStateAcronym(owner[31].mpart('selected', '>', '<').toName().toString()),

@@ -9,7 +9,7 @@ import { IconProps } from '../Navbar/NavbarIcon.component';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { setQuickCard } from '../../slices/quickCard.slice';
-import { Card as CardModel } from '../../models/Card.model';
+import { Card as CardModel, CardStatus } from '../../models/Card.model';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTE_BU_CARD, ROUTE_BU_RECHARGE } from '../../constants';
 
@@ -65,7 +65,7 @@ function Card(props: CardProps) {
   function renderButtons() {
     return <View style={styles.buttons}>
       { showHome ? renderButton(quickCard?.number === card.number ? HomeSolidIcon : HomeIcon, onPressHome) : null }
-      { showLock ? renderButton(card.status === 'Ativo' ? LockOpenIcon : LockClosedIcon, onPressLock) : null }
+      { showLock ? renderButton(card.status === CardStatus.ACTIVE ? LockOpenIcon : LockClosedIcon, onPressLock) : null }
       { showRecharge ? renderButton(BanknotesIcon, onPressRecharge) : null }
       { showDetails ? renderButton(ListBulletIcon, onPressDetails) : null }
     </View>;

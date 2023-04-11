@@ -12,9 +12,16 @@ import { Card } from './Card.model';
  * @property {Card} card Owner's card data
  * @property {string} [class] Owner's class
  * @property {number} [daily] Owner's daily spend credits
- * @property {string} status Owner's status ["Ativo", "Inativo", "Demitido"]
+ * @property {OwnerStatus} status Owner's status ["Ativo", "Inativo", "Demitido"]
  * @property {Address} [address] Owner's address
  */
+
+export enum OwnerStatus {
+  ACTIVE = 1,
+  INACTIVE = 2,
+  FIRED = 3,
+  UNKNOW = 4
+}
 
 /** @type Owner */
 export type Owner = {
@@ -28,6 +35,6 @@ export type Owner = {
   card: Card,
   class?: string,
   daily?: number,
-  status: string,
+  status: OwnerStatus,
   address?: Address
 };

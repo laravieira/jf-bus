@@ -6,6 +6,7 @@ import { Owner } from '../models/Owner.model';
 import { parsePage } from '../utils/parsePage.util';
 import { Card } from '../models/Card.model';
 import { parseCardDesign } from '../utils/parseCardDesign.util';
+import { parseOwnerStatus } from '../utils/parseOwnerStatus.util';
 
 /** Return Page object with list of owners registered to the current logged user (account manager)
  *
@@ -43,12 +44,11 @@ function Owners(session: string, page: number = 1): Promise<Page<Owner>> {
           name,
           cpf: owner[4].slice(1).part(null, '<').toString(),
           group: group.length ? group.toString() : undefined,
-          status: owner[5].part('>', '<').toString(),
+          status: parseOwnerStatus(owner[5].part('>', '<').toString()),
           card: {
             number: owner[6].part('>').part('>', '<').toString(),
             name,
             owner: id,
-            status: owner[7].part('>', '<').toString(),
             iss: parseInt(card[0].toString()),
             design: parseCardDesign(card[1].toString()),
             snr: parseInt(card[2].toString())

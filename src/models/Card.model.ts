@@ -23,7 +23,7 @@ import { OrderStatus } from './Order.model';
  * @property {CardDesign} design Card's design number (second part of card's number)
  * @property {number} snr Card's snr number (third part of card's number)
  * @property {Date} [createdAt] When the card was created
- * @property {string} [status] Card's status ["Ativo", "Inativo", "Demitido"]
+ * @property {CardStatus} [status] Card's status ["Ativo", "Aguardando", "Em Lista de Restrição"]
  * @property {CardBillet} [billet] Card's billet ids (only used on billet creation)
  * @property {Page<CardOrder>} [orders] Card's order history
  */
@@ -32,6 +32,13 @@ export enum CardDesign {
   TRANSPORT_TICKET = 400,
   COMMON = 9,
   BILLHETE_UNICO = 570,
+  UNKNOW = -1
+}
+
+export enum CardStatus {
+  WAITING = 1,
+  ACTIVE = 2,
+  RESTRICTED = 3,
   UNKNOW = -1
 }
 
@@ -60,7 +67,7 @@ export type Card = {
   design: CardDesign,
   snr: number,
   createdAt?: Date,
-  status?: string,
+  status?: CardStatus,
   billet?: CardBillet,
   orders?: Page<CardOrder>
 };
