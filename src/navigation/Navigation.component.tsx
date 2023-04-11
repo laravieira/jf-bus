@@ -13,9 +13,10 @@ function renderScreen(screen: {
   title: string,
   icon: (props: IconProps) => JSX.Element,
   component: (props: any) => JSX.Element,
-  visible: boolean
+  visible: boolean,
+  resetOnOutFocus?: boolean
 }, key: number) {
-  const { name, title, icon, component, visible } = screen;
+  const { name, title, icon, component, visible, resetOnOutFocus } = screen;
 
   return <Tab.Screen
     // @ts-ignore
@@ -24,7 +25,8 @@ function renderScreen(screen: {
     options={{
       title,
       tabBarIcon: props => <Navbar.Icon icon={icon} hasFocus={props.focused}/>,
-      tabBarButton: visible ? undefined : () => null
+      tabBarButton: visible ? undefined : () => null,
+      unmountOnBlur: resetOnOutFocus
     }}
     key={key}
   />

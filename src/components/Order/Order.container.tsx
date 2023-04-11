@@ -16,7 +16,7 @@ type OrderProps = {
 
 function Order(props: OrderProps) {
   const { session } = useAppSelector(state => state.user);
-  const { navigate, setParams } = useNavigation();
+  const { navigate } = useNavigation();
 
   function onDetails() {
     const { order } = props;
@@ -52,12 +52,8 @@ function Order(props: OrderProps) {
   function onDuplicate() {
     const { order } = props;
     // @ts-ignore
-    setParams({
-      data: { ...order, createdAt: undefined }
-    })
-    // @ts-ignore
     navigate(ROUTE_BU_RECHARGE, {
-      data: { ...order, createdAt: undefined }
+      order: { ...order, createdAt: undefined }
     });
   }
 

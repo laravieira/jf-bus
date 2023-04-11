@@ -8,56 +8,72 @@ import { Card } from '../../../models/Card.model';
 import { Owner } from '../../../models/Owner.model';
 import { Order } from '../../../models/Order.model';
 import CreateOrder from '../../../handlers/CreateOrder.handler';
+import { userLogin } from '../../../slices/user.slice';
+import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 
 // @ts-ignore
 type RechargeProps = BottomTabScreenProps<RootParamsList, ROUTE_BU_RECHARGE>;
+type paramsProp = { card?: Card, owner?: Owner, order?: Order, value?: number };
 
 function Recharge({ route: { params }, navigation }: RechargeProps) {
-  const { logged, session } = useAppSelector(state => state.user);
+  const { logged, session, loading: loginLoading, autoLogged } = useAppSelector(state => state.user);
   const { navigate, addListener, removeListener } = navigation;
+  const dispatch = useAppDispatch();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<Card[]>([]);
   const [value, setValue] = useState<number|null>(null);
 
   useEffect(() => {
-    if(!logged)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
-
     addListener('focus', onPageFocus);
 
     return () => removeListener('focus', onPageFocus);
-  }, [logged]);
+  }, []);
+
+  useEffect(onPageFocus, [loginLoading, logged]);
+
+  useEffect(() => {
+    setLoading(loginLoading || loading);
+  }, [loginLoading]);
 
   function onPageFocus() {
-    const { data } = params as { data?: Card|Owner|Order};
-    console.debug('onPageFocus', data);
-    if(data?.iss) {
-      const card = data as Card;
+    if(!logged && !loginLoading && !autoLogged)
+      dispatch(userLogin({}))
+    if(!logged && !loginLoading && autoLogged)
+      // @ts-ignore
+      navigate(ROUTE_BU_LOGIN);
+    if(logged && !loginLoading)
+      loadParams();
+  }
+
+  function loadParams() {
+    const { card, owner, order, value } = params as paramsProp;
+
+    if(card) {
       setCards([card]);
-      setValue((card.orders?.items[0]) ? card.orders?.items[0].credit : null);
-    }else if(data?.card) {
-      const owner = data as Owner;
+      setValue(value ? value : ((card.orders?.items[0]) ? card.orders?.items[0].credit : null));
+    }else if(owner) {
       setCards([owner.card]);
-      setValue(owner.card.orders?.items[0] ? owner.card.orders?.items[0].credit : null);
-    }else if(data?.value) {
-      const order = data as Order;
+      setValue(value ? value : (owner.card.orders?.items[0] ? owner.card.orders?.items[0].credit : null));
+    }else if(order) {
       setCards(order.cards?.items ?? []);
-      setValue(order.value);
+      setValue(value ? value : (order.value));
     }else {
       setCards([]);
-      setValue(null);
+      setValue(value ? value : null);
     }
   }
 
   function onCreate() {
+    setLoading(true);
     CreateOrder(session ?? '', cards[0], value ?? 3.1)
       .then(order => {
         console.debug(order);
         // @ts-ignore
         navigation.navigate(ROUTE_BU_MAIN);
       })
-      .catch(console.warn);
+      .catch(console.warn)
+      .finally(() => setLoading(false));
   }
 
   const rechargeComponentsProps = {

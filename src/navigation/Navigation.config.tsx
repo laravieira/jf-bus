@@ -28,13 +28,14 @@ type Screen = {
   title: string,
   icon: (props: IconProps) => JSX.Element,
   component: (props: any) => JSX.Element,
-  visible: boolean
+  visible: boolean,
+  resetOnOutFocus?: boolean
 }
 
 export type RootParamsList = BottomTabScreenProps<{
   [ROUTE_DEFAULT]: undefined,
   [ROUTE_BU_CARD]: { owner: number }
-  [ROUTE_BU_RECHARGE]: { data?: Card|Owner|Order }
+  [ROUTE_BU_RECHARGE]: { card?: Card, owner?: Owner, order?: Order, value?: number }
 }>
 
 export const SCREENS: Screen[] = [
@@ -85,7 +86,8 @@ export const SCREENS: Screen[] = [
     title: 'BU Create Recharge Page',
     icon: UserIcon,
     component: BU.Recharge,
-    visible: false
+    visible: false,
+    resetOnOutFocus: true
   },{
     name: ROUTE_BU_RECHARGES,
     title: 'BU Recharges List Page',
@@ -103,12 +105,14 @@ export const SCREENS: Screen[] = [
     title: 'Card Details Page',
     icon: ClockIcon,
     component: BU.Card,
-    visible: false
+    visible: false,
+    resetOnOutFocus: true
   },{
     name: ROUTE_SCHEDULE,
     title: 'Bus Schedule Page',
     icon: ClockIcon,
     component: Schedule,
-    visible: false
+    visible: false,
+    resetOnOutFocus: true
   }
 ];

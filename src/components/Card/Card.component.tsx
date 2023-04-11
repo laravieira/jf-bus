@@ -50,7 +50,7 @@ function Card(props: CardProps) {
 
   function onPressRecharge() {
     // @ts-ignore
-    navigate(ROUTE_BU_RECHARGE, { data: card });
+    navigate(ROUTE_BU_RECHARGE, { card });
   }
 
   function onPressDetails() {
