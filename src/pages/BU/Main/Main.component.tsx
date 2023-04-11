@@ -40,7 +40,7 @@ function MainComponent(props: MainComponentProps) {
 
   function renderQuickCard() {
     return <View style={styles.quickcard}>
-      { card ? <Card card={card} showDetails showRecharge/> : <Card.Empty/> }
+      { card ? <Card card={card} showDetails showRecharge showHome/> : <Card.Empty/> }
     </View>;
   }
 

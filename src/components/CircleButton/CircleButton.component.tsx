@@ -13,7 +13,7 @@ function CircleButton(props: ButtonProps) {
   const { onPress, children: Icon, style, size, color } = props;
 
   return <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-    <Icon size={ size ?? 32 } color={ color ?? '#6FA0BF' }/>
+    <Icon size={ size ?? 24 } color={ color ?? '#FFF' }/>
   </TouchableOpacity>;
 }
 
@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 56,
-    height: 56,
+    width: 48,
+    height: 48,
     backgroundColor: '#A9C6D9',
-    borderRadius: 28,
+    borderRadius: 24,
     shadowOffset: { width: 2, height: 4 },
     shadowRadius: 1,
     shadowColor: '#000',

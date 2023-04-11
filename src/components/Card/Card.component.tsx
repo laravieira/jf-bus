@@ -1,21 +1,21 @@
 import { Image, StyleSheet, View, ViewStyle } from 'react-native';
 import BilheteUnico from '../../../assets/bilhete-unico-logo.png';
+import ValeTransporte from '../../../assets/vale-transporte-logo.png';
 import Text from '../Text';
 import CircleButton from '../CircleButton';
-import { BanknotesIcon, HomeIcon, ListBulletIcon, LockClosedIcon, LockOpenIcon } from 'react-native-heroicons/outline';
+import { BanknotesIcon, HomeIcon, ListBulletIcon, LockClosedIcon } from 'react-native-heroicons/outline';
 import { HomeIcon as HomeSolidIcon } from 'react-native-heroicons/solid';
 import CardEmpty from './CardEmpty.component';
 import { IconProps } from '../Navbar/NavbarIcon.component';
 import useAppSelector from '../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../hooks/useAppDispatch.hook';
 import { setQuickCard } from '../../slices/quickCard.slice';
-import { Card as CardModel, CardStatus } from '../../models/Card.model';
+import { Card as CardModel, CardDesign, CardStatus } from '../../models/Card.model';
 import { useNavigation } from '@react-navigation/native';
 import { ROUTE_BU_CARD, ROUTE_BU_RECHARGE } from '../../constants';
 
 type CardProps = {
   card: CardModel,
-  showLock?: boolean,
   showHome?: boolean,
   showRecharge?: boolean,
   showDetails?: boolean,
@@ -25,7 +25,6 @@ type CardProps = {
 function Card(props: CardProps) {
   const {
     card,
-    showLock,
     showHome,
     showRecharge,
     showDetails,
@@ -44,10 +43,6 @@ function Card(props: CardProps) {
     }))
   }
 
-  function onPressLock() {
-
-  }
-
   function onPressRecharge() {
     // @ts-ignore
     navigate(ROUTE_BU_RECHARGE, { card });
@@ -63,16 +58,23 @@ function Card(props: CardProps) {
   }
 
   function renderButtons() {
+    const status = card.status ?? CardStatus.ACTIVE;
+
     return <View style={styles.buttons}>
       { showHome ? renderButton(quickCard?.number === card.number ? HomeSolidIcon : HomeIcon, onPressHome) : null }
-      { showLock ? renderButton(card.status === CardStatus.ACTIVE ? LockOpenIcon : LockClosedIcon, onPressLock) : null }
-      { showRecharge ? renderButton(BanknotesIcon, onPressRecharge) : null }
+      { showRecharge ? renderButton(status === CardStatus.ACTIVE ? BanknotesIcon : LockClosedIcon, onPressRecharge) : null }
       { showDetails ? renderButton(ListBulletIcon, onPressDetails) : null }
     </View>;
   }
 
+  function renderLogo() {
+    if(card.design !== CardDesign.BILLHETE_UNICO)
+      return <Image source={ ValeTransporte } style={ styles.imageVT }/>;
+    return <Image source={ BilheteUnico } style={ styles.imageBU }/>;
+  }
+
   return <View style={[styles.card, style]}>
-    <Image source={BilheteUnico} style={styles.image}/>
+    { renderLogo() }
     <View style={styles.details}>
       <Text>{ card.name }</Text>
       <Text>{ card.number }</Text>
@@ -92,12 +94,20 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: .25,
     elevation: 5,
-    paddingVertical: 21,
-    paddingLeft: 23
+    paddingBottom: 21,
+    overflow: 'hidden'
   },
-  image: {
+  imageBU: {
     width: '67.2%',
-    borderWidth: 1
+    borderWidth: 1,
+    marginTop: 21,
+    marginLeft: 23
+  },
+  imageVT: {
+    position: 'absolute',
+    borderWidth: 1,
+    width: '60%',
+    height: '90%'
   },
   details: {
     position: 'absolute',
@@ -106,9 +116,9 @@ const styles = StyleSheet.create({
   },
   buttons: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 16,
     right: 24,
-    gap: 16
+    gap: 10
   }
 });
 

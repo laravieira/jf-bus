@@ -15,7 +15,7 @@ function Home() {
 
   function renderQuickCard() {
     if(card)
-      return <Card card={card} showRecharge/>;
+      return <Card card={card} showRecharge showDetails/>;
     else
       return <Card.Empty/>;
   }

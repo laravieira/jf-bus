@@ -62,7 +62,7 @@ function Cards() {
   }
 
   function renderCard(owner: Owner) {
-    return <Card card={owner.card} style={styles.card} showHome/>;
+    return <Card card={owner.card} style={styles.card} showHome showRecharge showDetails/>;
   }
 
   function renderItem({ item: owner, index }: ListRenderItemInfo<Owner>) {
