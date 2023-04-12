@@ -1,7 +1,6 @@
 import { ScrollView, ScrollViewProps, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HEADER_HEIGHT } from '../SearchBar/SearchBar.config';
-import { PAGE_HORIZONTAL_PADDING } from './PageContainer.config';
 
 function PageContainerScroll(props: ScrollViewProps) {
   return <SafeAreaView style={styles.wrapper}>
@@ -18,7 +17,6 @@ const styles = StyleSheet.create({
     paddingTop: HEADER_HEIGHT + 8
   },
   container: {
-    paddingHorizontal: PAGE_HORIZONTAL_PADDING,
     paddingTop: 32
   },
   bottomspace: {

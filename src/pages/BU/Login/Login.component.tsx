@@ -76,7 +76,8 @@ function Login() {
 
 const styles = StyleSheet.create({
   header: {
-    marginBottom: 0
+    marginBottom: 0,
+    paddingHorizontal: 0
   },
   largeSpace: {
     marginTop: 32

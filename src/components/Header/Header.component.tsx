@@ -2,6 +2,7 @@ import { StyleSheet, TouchableOpacity, TouchableOpacityProps, View, ViewProps } 
 import Text from '../Text';
 import Line from '../Line';
 import { IconProps } from '../Navbar/NavbarIcon.component';
+import { PAGE_HORIZONTAL_PADDING } from '../PageContainer/PageContainer.config';
 
 type HeaderProps = {
   length?: number,
@@ -39,7 +40,8 @@ function Header(props: HeaderProps) {
 const styles = StyleSheet.create({
   header: {
     gap: 8,
-    marginBottom: 24
+    marginBottom: 24,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING
   },
   title: {
     flexDirection: 'row',

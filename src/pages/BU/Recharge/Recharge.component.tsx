@@ -6,6 +6,7 @@ import Button from '../../../components/Button';
 import Card from '../../../components/Card';
 import { Card as CardModel } from '../../../models/Card.model';
 import Header from '../../../components/Header';
+import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageContainer.config';
 
 type RechargeProps = {
   value: number|null,
@@ -30,12 +31,13 @@ function Recharge(props: RechargeProps) {
   }
 
   function renderButton() {
-    return <Button
-      onPress={create}
-      disabled={loading}
-      style={styles.button}>
-      Create Recharge
-    </Button>;
+    return <View style={styles.button}>
+      <Button
+        onPress={create}
+        disabled={loading}>
+        Create Recharge
+      </Button>
+    </View>;
   }
 
   function renderCard(card: CardModel, key: number) {
@@ -58,14 +60,17 @@ function Recharge(props: RechargeProps) {
 const styles = StyleSheet.create({
   input: {
     marginBottom: 32,
-    gap: 8
+    gap: 8,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING
   },
   button: {
-    marginBottom: 48
+    marginBottom: 48,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING
   },
   cards: {
     marginBottom: 32,
-    gap: 24
+    gap: 24,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING
   }
 });
 

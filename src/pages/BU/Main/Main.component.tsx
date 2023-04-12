@@ -39,7 +39,7 @@ function MainComponent(props: MainComponentProps) {
 
   function renderQuickCard() {
     return <View style={styles.quickcard}>
-      <Header>Main Card</Header>
+      <Header style={styles.quickcardHeader}>Main Card</Header>
       { card ? <Card card={card} showDetails showRecharge showHome/> : <Card.Empty/> }
     </View>;
   }
@@ -70,6 +70,9 @@ const styles = StyleSheet.create({
   quickcard: {
     marginTop: 24,
     paddingHorizontal: PAGE_HORIZONTAL_PADDING
+  },
+  quickcardHeader: {
+    paddingHorizontal: 0
   },
   recharges: {
     marginTop: 32,
