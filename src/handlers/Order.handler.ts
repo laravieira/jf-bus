@@ -23,7 +23,7 @@ import { parseCardDesign } from '../utils/parseCardDesign.util';
  */
 function Order(session: string, order: OrderModel, page: number = 1): Promise<OrderModel> {
   const query = new URLSearchParams({
-    'PRV_ID': `${order.owner}`,
+    'PRV_ID': `${typeof order.owner === 'number' ? order.owner : order.owner.id}`,
     'ROM_TRANID': `${order.number}`,
     'ROM_SEQNBR': `${order.status}`,
   });
@@ -33,23 +33,23 @@ function Order(session: string, order: OrderModel, page: number = 1): Promise<Or
   });
 
   return useAxios(session).get(BU_PRELOAD_ORDER)
-    .then(() => Promise.all([
-      useAxios(session).get(`${BU_PATH_ORDER}?${query}`),
-      useAxios(session).get(`${BU_PATH_ORDER_CARDS}?${pageQuery}`),
-      useAxios(session).get(`${BU_PATH_ORDER_PRINT}?${query}`)
-    ]))
-    .then(datas => {
-      if(!datas[0].data.includes('textoTD'))
+    .then(async () => {
+      const order = await useAxios(session).get(`${BU_PATH_ORDER}?${query}`);
+      if(!order.data.includes('textoTD'))
         return Promise.reject('Invalid order data.');
-      if(!datas[1].data.includes('CabecalhoGrid'))
+
+      const cards = await useAxios(session).get(`${BU_PATH_ORDER_CARDS}?${pageQuery}`);
+      if(!cards.data.includes('CabecalhoGrid'))
         return Promise.reject('Invalid cards data.');
-      if(!datas[2].data.includes('ProviderData1_ControlData'))
+
+      const print = await useAxios(session).get(`${BU_PATH_ORDER_PRINT}?${query}`);
+      if(!print.data.includes('ProviderData1_ControlData'))
         return Promise.reject('Invalid print data.');
 
       return {
-        order: new ExtractableString(datas[0].data),
-        cards: new ExtractableString(datas[1].data),
-        print: new ExtractableString(datas[2].data)
+        order: new ExtractableString(order.data),
+        cards: new ExtractableString(cards.data),
+        print: new ExtractableString(print.data)
       } as { order: ExtractableString, cards: ExtractableString, print: ExtractableString };
     })
     .then(data => {

@@ -14,7 +14,7 @@ function CancelOrder(session: string, order: OrderModel, page: number = 1): Prom
   const query = new URLSearchParams({
     page: `${page}`,
     exclude: '1',
-    PRV_ID: `${order.owner}`,
+    PRV_ID: `${typeof order.owner === 'number' ? order.owner : order.owner.id}`,
     ROM_TRANID: `${order.number}`,
     ROM_SEQNBR: `${order.status}`
   });

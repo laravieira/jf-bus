@@ -16,7 +16,7 @@ import { Order as OrderModel } from '../models/Order.model';
  */
 function Receipt(session: string, order: OrderModel): Promise<void> {
   const query = new URLSearchParams({
-    'PRV_ID': `${order.owner}`,
+    'PRV_ID': `${typeof order.owner === 'number' ? order.owner : order.owner.id}`,
     'ROM_TRANID': `${order.number}`,
     'ROM_SEQNBR': `${order.status}`
   });

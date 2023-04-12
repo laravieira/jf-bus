@@ -14,7 +14,7 @@ const BU_CACHE_PATH_BILLET = `${cacheDirectory}BU - Billet.pdf`;
 
 function downloadPDF(session: string, order: OrderModel): Promise<FileSystemDownloadResult> {
   const query = new URLSearchParams({
-    'ProviderID': `${order.owner}`,
+    'ProviderID': `${typeof order.owner === 'number' ? order.owner : order.owner.id}`,
     'TransactionID': `${order.number}`,
     'SequenceID': `${order.status}`
   });
