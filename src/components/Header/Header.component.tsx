@@ -5,7 +5,7 @@ import { IconProps } from '../Navbar/NavbarIcon.component';
 import { PAGE_HORIZONTAL_PADDING } from '../PageContainer/PageContainer.config';
 
 type HeaderProps = {
-  length?: number,
+  length?: number|string,
   total?: number,
   button?: (props: IconProps) => JSX.Element
 } & ViewProps & TouchableOpacityProps;
