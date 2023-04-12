@@ -1,5 +1,4 @@
-import useAxios from '../hooks/useAxios.hook';
-import { BU_COOKIE_SESSION, BU_HOST, BU_PATH_BILLET, BU_PRELOAD_BILLET, } from '../constants';
+import { BU_COOKIE_SESSION, BU_HOST, BU_PATH_BILLET } from '../constants';
 import { shareAsync } from 'expo-sharing';
 import {
   cacheDirectory,
@@ -19,13 +18,12 @@ function downloadPDF(session: string, order: OrderModel): Promise<FileSystemDown
     'SequenceID': `${order.status}`
   });
 
-  return useAxios(session).get(BU_PRELOAD_BILLET)
+  return deleteAsync(BU_CACHE_PATH_BILLET, { idempotent: true })
     // writeAsStringAsync() has a bug that makes it impossible to save .pdf to a file
     // so useAxios().get() gets the pdf content, but then I'm unable to save it.
     // The problem is with EncodingType.UTF-8, but I was also unable to convert the .pdf
     // content to EncodingType.Base64 (the only other supported) without breaking the .pdf.
     // downloadAsync() is less controllable and not the pattern used here, but it does the job.
-    .then(() => deleteAsync(BU_CACHE_PATH_BILLET, { idempotent: true }))
     .then(() => downloadAsync(
       `${BU_HOST}${BU_PATH_BILLET}?${query}`,
       BU_CACHE_PATH_BILLET,

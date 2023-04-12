@@ -38,6 +38,15 @@ export enum OrderStatus {
   CANCELED = 2,
   DONE = 3,
   UNKNOW = 4
+  // Todos = 'selected',
+  // Novo = 'N',
+  // Pago = 'P',
+  // Parcialmente  = 'T',
+  // Pago e Liberado = 'Q',
+  // Liberado = 'R',
+  // Inconsistente = 'I',
+  // Excluído = 'D',
+  // Abortado = 'C',
 }
 
 /** @type OrderOwner */
