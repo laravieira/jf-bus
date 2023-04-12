@@ -9,7 +9,7 @@ import { Order as OrderModel } from '../../../models/Order.model';
 import Order from '../../../components/Order';
 import Header from '../../../components/Header';
 
-type MainComponentProps = {
+type MainProps = {
   card: CardModel|null,
   orders: OrderModel[],
   onPageAccount: () => void,
@@ -18,7 +18,7 @@ type MainComponentProps = {
   onLogout: () => void
 };
 
-function MainComponent(props: MainComponentProps) {
+function Main(props: MainProps) {
   const {
     card,
     orders,
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MainComponent;
+export default Main;

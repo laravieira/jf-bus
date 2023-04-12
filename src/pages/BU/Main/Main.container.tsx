@@ -4,7 +4,7 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_ACCOUNT, ROUTE_BU_CARDS, ROUTE_BU_RECHARGES } from '../../../constants';
 import { logout } from '../../../slices/login.slice';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
-import MainComponent from './Main.component';
+import MainPage from './Main.page';
 import { loadQuickCard } from '../../../slices/quickCard.slice';
 import Orders from '../../../handlers/Orders.handler';
 import { Order } from '../../../models/Order.model';
@@ -47,7 +47,7 @@ function Main() {
     dispatch(logout());
   }
 
-  const mainComponentProps = {
+  const mainPageProps = {
     card,
     orders,
     onPageAccount,
@@ -56,7 +56,7 @@ function Main() {
     onLogout
   };
 
-  return <MainComponent { ...mainComponentProps }/>;
+  return <MainPage { ...mainPageProps }/>;
 }
 
 export default Main;

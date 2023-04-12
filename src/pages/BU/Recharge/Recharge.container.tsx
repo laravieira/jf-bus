@@ -3,7 +3,7 @@ import useAppSelector from '../../../hooks/useAppSelector.hook';
 import { ROUTE_BU_MAIN, ROUTE_BU_RECHARGE } from '../../../constants';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { RootParamsList } from '../../../navigation/Navigation.config';
-import RechargeComponent from './Recharge.component';
+import RechargePage from './Recharge.page';
 import { Card } from '../../../models/Card.model';
 import { Owner } from '../../../models/Owner.model';
 import { Order } from '../../../models/Order.model';
@@ -82,7 +82,7 @@ function Recharge({ route: { params }, navigation }: RechargeProps) {
       .finally(() => setLoading(false));
   }
 
-  const rechargeComponentsProps = {
+  const rechargePageProps = {
     value,
     setValue,
     create: onCreate,
@@ -90,7 +90,7 @@ function Recharge({ route: { params }, navigation }: RechargeProps) {
     loading
   };
 
-  return <RechargeComponent { ...rechargeComponentsProps } />;
+  return <RechargePage { ...rechargePageProps } />;
 }
 
 export default Recharge;

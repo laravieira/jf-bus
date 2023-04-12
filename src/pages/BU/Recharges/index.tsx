@@ -1,3 +1,3 @@
-import Recharges from './Recharges.component';
+import Recharges from './Recharges.page';
 
 export default Recharges;

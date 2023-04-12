@@ -1,3 +1,3 @@
-import Schedule from './Schedule.component';
+import Schedule from './Schedule.page';
 
 export default Schedule;

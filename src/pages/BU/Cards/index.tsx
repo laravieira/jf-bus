@@ -1,3 +1,3 @@
-import Cards from './Cards.component';
+import Cards from './Cards.page';
 
 export default Cards;

@@ -8,7 +8,7 @@ import { RootParamsList } from '../../../navigation/Navigation.config';
 import { useSession } from '../../../hooks/useSession.hook';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
 import { setLogin } from '../../../slices/login.slice';
-import OrderComponent from './Order.component';
+import OrderPage from './Order.page';
 import Billet from '../../../handlers/Billet.handler';
 import Receipt from '../../../handlers/Receipt.handler';
 import CancelOrder from '../../../handlers/CancelOrder.handler';
@@ -85,7 +85,7 @@ function Order({ route: { params }, navigation }: OrderProps) {
       .catch(console.warn);
   }
 
-  const orderComponentProps = {
+  const orderPageProps = {
     order,
     onShare,
     onCodeCopy,
@@ -94,7 +94,7 @@ function Order({ route: { params }, navigation }: OrderProps) {
     onCancel
   };
 
-  return <OrderComponent { ...orderComponentProps }/>;
+  return <OrderPage { ...orderPageProps }/>;
 }
 
 export default Order;

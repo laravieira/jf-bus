@@ -1,3 +1,3 @@
-import Account from './Account.component';
+import Account from './Account.page';
 
 export default Account;
