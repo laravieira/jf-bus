@@ -49,6 +49,7 @@ export const ROUTE_HOME         = 'home';
 export const ROUTE_BU_MAIN      = 'bu-main';
 export const ROUTE_BU_LOGIN     = 'bu-login';
 export const ROUTE_BU_ACCOUNT   = 'bu-account';
+export const ROUTE_BU_ORDER     = 'bu-order';
 export const ROUTE_BU_RECHARGE  = 'bu-recharge';
 export const ROUTE_BU_RECHARGES = 'bu-recharges';
 export const ROUTE_BU_CARDS     = 'bu-cards';
