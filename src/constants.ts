@@ -2,6 +2,7 @@ export const BU_HOST = 'https://vtclient.juizdefora.prodatamobility.com.br/';
 
 export const BU_COOKIE_SESSION = 'ASP.NET_SessionId';
 export const BU_COOKIE_LOGGED = 'LoginHome';
+export const BU_COOKIE_TIMEOUT = 1000*60*21; // 21 mins in milisseconds
 
 export const BU_STORE_USER      = 'user';
 export const BU_STORE_PASSWORD  = 'password';

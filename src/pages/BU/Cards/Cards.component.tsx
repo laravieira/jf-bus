@@ -1,38 +1,31 @@
 import PageContainer from '../../../components/PageContainer';
 import Text from '../../../components/Text';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
-import { ROUTE_BU_LOGIN } from '../../../constants';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import Owners from '../../../handlers/Owners.handler';
 import Card from '../../../components/Card';
 import { Page } from '../../../models/Page.model';
 import { Owner } from '../../../models/Owner.model';
 import Header from '../../../components/Header';
+import { useSession } from '../../../hooks/useSession.hook';
+import useAppDispatch from '../../../hooks/useAppDispatch.hook';
+import { setLogin } from '../../../slices/login.slice';
 
 function Cards() {
-  const { logged, session } = useAppSelector(state => state.user);
-  const { navigate, addListener, removeListener } = useNavigation();
+  const login = useAppSelector(state => state.login);
+  const session = useSession(login, useAppDispatch(), setLogin, useNavigation(), onSessionOrFocus);
   const [page, setPage] = useState<Page<Owner>>({ current: 0, total: 0, pages: 1, items: []});
   const [loading, setLoading] = useState<boolean>(false);
   const [cards, setCards] = useState<Owner[]>([]);
-
-  useEffect(() => {
-    if(!logged)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
-
-    addListener('focus', onPageFocus);
-
-    return () => removeListener('focus', onPageFocus);
-  }, [logged]);
 
   function loadCards() {
     if(loading || page.current+1 > page.pages)
       return;
     setLoading(true);
-    Owners(session ?? '', page.current+1)
+    session()
+      .then(session => Owners(session, page.current+1))
       .then(page => {
         setCards([...cards, ...page.items])
         return page;
@@ -45,7 +38,7 @@ function Cards() {
       .finally(() => setLoading(false));
   }
 
-  function onPageFocus() {
+  function onSessionOrFocus() {
     if(cards.length)
       return;
     loadCards();

@@ -1,47 +1,62 @@
 import PageContainer from '../../../components/PageContainer';
 import Text from '../../../components/Text';
 import InputField from '../../../components/InputField';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import CheckField from '../../../components/CheckField';
-import { BU_HOST, BU_PATH_PASSWORD, ROUTE_BU_MAIN } from '../../../constants';
+import { BU_HOST, BU_PATH_PASSWORD, ROUTE_BU_LOGIN, ROUTE_BU_MAIN } from '../../../constants';
 import Button from '../../../components/Button';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
 import useAppDispatch from '../../../hooks/useAppDispatch.hook';
-import { userLogin } from '../../../slices/user.slice';
+import { login, setLogin } from '../../../slices/login.slice';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../../components/Header';
+import { useSession } from '../../../hooks/useSession.hook';
 
 function Login() {
-  const { logged, loading, autoLogged } = useAppSelector(state => state.user);
+  const state = useAppSelector(state => state.login);
+  const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const { navigate, addListener, removeListener } = useNavigation();
+  const session = useSession(
+    state,
+    useAppDispatch(),
+    setLogin,
+    { ...navigation, navigate },
+    onSessionOrFocus
+  );
 
+  const [logging, setLogging] = useState<boolean>(false);
   const [document, setUser] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [keep, setKeep] = useState<boolean>(true);
 
-  useEffect(() => {
-    addListener('focus', onPageFocus);
+  function onSessionOrFocus() {
+    const { logged, loading, autoLogged } = state;
 
-    return () => removeListener('focus', onPageFocus);
-  }, []);
+    if(!logging && !loading && !autoLogged)
+      session()
+        .then(() => navigate(ROUTE_BU_MAIN))
+        .catch(() => null)
 
-  useEffect(() => {
-    if(logged && !loading)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_MAIN });
-    if(!logged && !loading && !autoLogged)
-      alert('Did u type something wrong?');
-  }, [logged, loading]);
+    if(logging && !loading) {
+      setLogging(false);
+      if(logged)
+        return navigate(ROUTE_BU_MAIN);
+      return alert('Wrong CPF or password.');
+    }
+  }
 
-  function onPageFocus() {
-    if(!logged && !loading && document.length)
-      dispatch(userLogin({}))
+  /** Blocks useSession from recalling login route (we already here) */
+  function navigate(route: string) {
+    if(route === ROUTE_BU_LOGIN)
+      return;
+    // @ts-ignore
+    navigation.navigate(route);
   }
 
   function onLogin() {
-    dispatch(userLogin({user: document, password, keep}));
+    setLogging(true);
+    dispatch(login({user: document, password, keep}));
   }
   
   return <PageContainer>

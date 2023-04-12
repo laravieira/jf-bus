@@ -31,7 +31,7 @@ function Card(props: CardProps) {
     style
   } = props;
   const { card: quickCard } = useAppSelector(state => state.quickCard);
-  const { session } = useAppSelector(state => state.user);
+  const { session } = useAppSelector(state => state.login);
   const { navigate } = useNavigation();
   const dispatch = useAppDispatch();
 

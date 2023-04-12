@@ -1,9 +1,8 @@
 import PageContainer from '../../../components/PageContainer';
 import Text from '../../../components/Text';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useAppSelector from '../../../hooks/useAppSelector.hook';
-import { ROUTE_BU_LOGIN } from '../../../constants';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import Orders from '../../../handlers/Orders.handler';
 import Order from '../../../components/Order';
@@ -11,29 +10,23 @@ import { PAGE_HORIZONTAL_PADDING } from '../../../components/PageContainer/PageC
 import { Order as OrderModel } from '../../../models/Order.model';
 import { Page } from '../../../models/Page.model';
 import Header from '../../../components/Header';
+import { useSession } from '../../../hooks/useSession.hook';
+import useAppDispatch from '../../../hooks/useAppDispatch.hook';
+import { setLogin } from '../../../slices/login.slice';
 
 function Recharges() {
-  const { logged, session } = useAppSelector(state => state.user);
-  const { navigate, addListener, removeListener } = useNavigation();
+  const login = useAppSelector(state => state.login);
+  const session = useSession(login, useAppDispatch(), setLogin, useNavigation(), onSessionOrFocus);
   const [page, setPage] = useState<Page<OrderModel>>({ current: 0, total: 0, pages: 1, items: []});
   const [loading, setLoading] = useState<boolean>(false);
   const [orders, setOrders] = useState<OrderModel[]>([]);
-
-  useEffect(() => {
-    if(!logged)
-      // @ts-ignore
-      navigate({ name: ROUTE_BU_LOGIN });
-
-    addListener('focus', onPageFocus);
-
-    return () => removeListener('focus', onPageFocus);
-  }, [logged]);
 
   function loadOrders() {
     if(loading || page.current+1 > page.pages)
       return;
     setLoading(true);
-    Orders(session ?? '', page.current+1)
+    session()
+      .then(session => Orders(session, page.current+1))
       .then(page => {
         setOrders([...orders, ...page.items])
         return page;
@@ -46,7 +39,7 @@ function Recharges() {
       .finally(() => setLoading(false));
   }
 
-  function onPageFocus() {
+  function onSessionOrFocus() {
     if(orders.length)
       return;
     loadOrders();

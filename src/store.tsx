@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import searchSlice from './slices/search.slice';
-import userSlice from './slices/user.slice';
+import loginSlice from './slices/login.slice';
 import quickCardSlice from './slices/quickCard.slice';
 
 export const store = configureStore({
   reducer: {
     search: searchSlice,
-    user: userSlice,
+    login: loginSlice,
     quickCard: quickCardSlice
   }
 });

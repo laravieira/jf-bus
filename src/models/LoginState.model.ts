@@ -4,6 +4,7 @@
  * @property {string|null} session The key of the current valid logged session
  * @property {string|null} user The logged account's CPF
  * @property {boolean} autoLogged If last login request was made by autologin nor user input
+ * @property {number} since Timestamp of when last login happen
  */
 
 /** @type LoginState */
@@ -12,5 +13,6 @@ export type LoginState = {
   loading: boolean,
   session: string|null,
   user: string|null,
-  autoLogged: boolean
+  autoLogged: boolean,
+  since: number
 };

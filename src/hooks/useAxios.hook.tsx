@@ -8,8 +8,7 @@ const useAxios: (session?: string) => Axios = (session) => {
       'Content-Type': 'application/x-www-form-urlencoded'
     } : undefined,
     withCredentials: true,
-    baseURL: BU_HOST,
-
+    baseURL: BU_HOST
   });
 }
 

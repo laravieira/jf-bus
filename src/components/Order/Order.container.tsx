@@ -15,7 +15,8 @@ type OrderProps = {
 };
 
 function Order(props: OrderProps) {
-  const { session } = useAppSelector(state => state.user);
+  const login = useAppSelector(state => state.login);
+  const session = useSession(login, useAppDispatch(), setLogin, useNavigation());
   const { navigate } = useNavigation();
 
   function onDetails() {

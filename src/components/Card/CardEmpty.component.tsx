@@ -10,7 +10,7 @@ type CardEmptyProps = {
 };
 
 function CardEmpty(props: CardEmptyProps) {
-  const { logged } = useAppSelector(state => state.user)
+  const { logged } = useAppSelector(state => state.login)
   const { navigate } = useNavigation();
   const { style } = props;
 
