@@ -6,8 +6,8 @@ import SMU from './handlers/SMU.handler';
 DotEnv.config();
 
 SMU();
-// Meta.read()
-//   .then(console.debug);
-//
-// Data.read()
-//   .then(console.debug);
+Meta.read()
+  .then(console.debug);
+
+Data.read()
+  .then(console.debug);
