@@ -10,6 +10,9 @@
     "install:scheduler": "cd scheduler && yarn install",
     "postinstall": "concurrently \"yarn install:app\" \"yarn install:scheduler\"",
 
+    "test:app": "cd app && yarn test",
+    "test:scheduler": "cd scheduler && yarn test",
+
     "android:server:dev": "cd app && yarn android:server:dev",
     "android:build:dev": "cd app && yarn android:build:dev",
     "android:build:preview": "cd app && yarn android:build:preview",
@@ -21,8 +24,7 @@
     "eas:configure": "cd app && yarn eas:configure",
     "eas:submit": "cd app && yarn eas:submit",
 
-    "scheduler:start": "cd scheduler && yarn start",
-    "scheduler:test": "cd scheduler && yarn test"
+    "scheduler:start": "cd scheduler && yarn start"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
