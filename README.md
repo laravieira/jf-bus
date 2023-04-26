@@ -1,7 +1,12 @@
+# JF Bus App
+The Juiz de Fora first app to let you recharge your Bilhete Único card on your phone.
+
+See the bus schedules of Juiz de Fora.
+
 ## How to run the app locally
 #### Install packages
 ```shell
-yarn
+yarn install:app
 ```
 
 #### How to build `.dev.apk` online
@@ -50,4 +55,23 @@ yarn android:build:install
 ```shell
 yarn eas:login
 yarn eas:configure
+```
+
+## Scheduler Extractor
+This is a script to extract the bus schedules from the [PJF website](https://www.pjf.mg.gov.br/transporte-urbano/itinerarios-e-horarios-de-onibus) and save it to JSON files.
+### The extracted data
+* The last extracted data is at [scheduler/data](scheduler/data).
+* The data models are at [scheduler/src/models](scheduler/src/models).
+
+#### How to install
+```shell
+yarn install:scheduler
+```
+#### How to run
+```shell
+yarn scheduler:start
+```
+#### How to test
+```shell
+yarn scheduler:test
 ```

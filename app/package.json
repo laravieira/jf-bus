@@ -4,8 +4,13 @@
   "name": "jf-bus",
   "scripts": {
     "android:server:dev": "expo start --dev-client",
+
     "android:build:dev": "rm -f *.apk && eas build --profile development --platform android --local",
     "android:build:preview": "eas build --profile preview --platform android --local",
+    "android:build:dev:online": "rm -f *.apk && eas build --profile development --platform android",
+    "android:build:preview:online": "eas build --profile preview --platform android",
+    "android:build:install": "echo Not implemented",
+
     "eas:login": "eas login",
     "eas:configure": "eas build:configure",
     "eas:submit": "eas submit --platform android"
