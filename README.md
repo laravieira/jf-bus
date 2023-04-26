@@ -31,7 +31,7 @@ yarn android:build:dev
 
 #### How to run dev server locally
 ```shell
-yarn android:dev:server
+yarn android:server:dev
 ```
 
 #### How to build `.preview.apk` locally
