@@ -58,7 +58,7 @@ yarn eas:configure
 ```
 
 ## Scheduler Extractor
-This is a script to extract the bus schedules from the [PJF website](https://www.pjf.mg.gov.br/transporte-urbano/itinerarios-e-horarios-de-onibus) and save it to JSON files.
+This is a script to extract the bus schedules from the [PJF website](https://www.pjf.mg.gov.br/onibus/itinerario/index.php) and save it to JSON files.
 ### The extracted data
 * The last extracted data is at [scheduler/data](scheduler/data).
 * The data models are at [scheduler/src/models](scheduler/src/models).
