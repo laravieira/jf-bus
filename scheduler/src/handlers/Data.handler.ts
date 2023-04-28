@@ -15,8 +15,8 @@ function read(): Promise<Line[]> {
   load(file);
 
   return readFile(file)
-    .then(data => JSON.parse(data.toString()))
-    .then((data: []) => data.map((line: Line) => ({
+    .then(data => JSON.parse(data.toString()) as Line[])
+    .then(data => data.map((line: Line) => ({
       ...line,
       meta: {
         ...line.meta,

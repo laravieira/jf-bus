@@ -1,8 +1,8 @@
 export type MetaLine = {
   number: number,
+  name: string,
   active: boolean,
   accessible: boolean,
-  outdated: boolean,
   updated: Date,
   created: Date
 }

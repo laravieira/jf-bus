@@ -1,4 +1,4 @@
-export enum WorkingDays {
+export enum WorkingDay {
   WEEKDAYS,
   SATURDAY,
   HOLYDAYS
@@ -6,13 +6,13 @@ export enum WorkingDays {
 
 export enum Way {
   GOING,
-  RETURNING
+  COMMING
 }
 
 export type Schedule = {
-  working: WorkingDays[],
+  day: WorkingDay,
   way: Way,
   time: Date,
   accessible: boolean,
-  extra: string
+  extra?: string
 }

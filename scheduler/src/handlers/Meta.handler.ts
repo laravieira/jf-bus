@@ -8,7 +8,6 @@ function load(file: string) {
     writeFileSync(file, JSON.stringify({
       lines: [],
       numbers: [],
-      changed: [],
       total: 0,
       active: 0,
       accessible: 0,
@@ -22,7 +21,7 @@ function read(): Promise<Meta> {
   load(file);
 
   return readFile(file)
-    .then(data => JSON.parse(data.toString()))
+    .then(data => JSON.parse(data.toString()) as Meta)
     .then(data => ({
       ...data,
       updated: new Date(data.updated),
