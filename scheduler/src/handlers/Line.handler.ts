@@ -3,7 +3,7 @@ import { ExtractableString } from '../utils/ExtractableString.util';
 import { Line as LineModel } from '../models/Line.model';
 import { decode } from 'iconv-lite';
 import { MetaLine } from '../models/MetaLine.model';
-import { Schedule, Way, WorkingDay } from '../models/Schedule.model';
+import { Schedule, WorkingDay } from '../models/Schedule.model';
 
 function rawWorkingDay(day: WorkingDay): string {
   if(day === WorkingDay.WEEKDAYS)
@@ -15,7 +15,7 @@ function rawWorkingDay(day: WorkingDay): string {
   return '';
 }
 
-function extractSchedules(data: ExtractableString, day: WorkingDay, name: string = 'CENTRO'): Schedule[] {
+function extractSchedules(data: ExtractableString, day: WorkingDay, name: string = 'Centro'): Schedule[] {
   return data.part(`<b>${rawWorkingDay(day)}</b>`)
     .mpart(`<b>Saídas de ${name.toUpperCase()}</b>`, '<table>', '</table>')
     .split('<td>')
@@ -24,7 +24,7 @@ function extractSchedules(data: ExtractableString, day: WorkingDay, name: string
       const time = item.part(null, ' ').split(':');
       return {
         day,
-        way: name.includes('CENTRO') ? Way.COMMING : Way.GOING,
+        way: name,
         time: new Date(Date.parse(
           // 1970-01-01T23:59:00.000+00:00
           `1970-01-01T${time[0]}:${time[1]}:00.000+00:00`
@@ -33,6 +33,27 @@ function extractSchedules(data: ExtractableString, day: WorkingDay, name: string
         extra: item.includes('title') ? item.mpart('title', ' - ', '"').toString().trim() : undefined
       } as Schedule;
     });
+}
+
+function extractPath(data: ExtractableString, way: string): string[] {
+  return data.part('<b>ITINERÁRIO</b>')
+    .mpart(`<b>${way}</b>`, '<p>', '</p>')
+    .toString()
+    .replace('   ', '\n')
+    .replace('\r\n', '\n')
+    .split('\n')
+    .map(item => item.trim().replace(/[,.]+$/, ''))
+    .map((path: string, index: number, paths: string[]) => {
+      if(path.startsWith('s/n'))
+        return '';
+      if(!paths[index+1])
+        return path;
+      if(!paths[index+1].startsWith('s/n'))
+        return path;
+      return path.concat(' ', paths[index+1]);
+    })
+    .filter(item => item !== '')
+    .map(path => path.includes('(') && !path.includes(')') ? path.concat(')') : path)
 }
 
 function Line(number: number): Promise<LineModel|null> {
@@ -62,7 +83,9 @@ function Line(number: number): Promise<LineModel|null> {
 
     .then(data => {
       const name = data.mpart('nome_bairro', '>', '<').toString();
-      const ways = name.split('/').map(item => item.trim().toUpperCase());
+      const ways = name.split('/').map(item => item.trim());
+      const going = ways[0];
+      const coming = ways.length > 1 ? ways[ways.length-1] : 'Centro';
 
       return {
         meta: {
@@ -73,21 +96,13 @@ function Line(number: number): Promise<LineModel|null> {
           active: true,
           accessible: data.includes('Ve&iacute;culo Adaptado'),
         } as MetaLine,
+        ways: {
+          going,
+          coming
+        },
         path: {
-          going: data.part('<b>ITINERÁRIO</b>')
-            .mpart('<b>IDA</b>', '<p>', '</p>')
-            .toString()
-            .replace('\r\n', '\n')
-            .split('\n')
-            .map(item => item.trim().replace(/[,.]+$/, ''))
-            .filter(item => item !== ''),
-          coming: data.part('<b>ITINERÁRIO</b>')
-            .mpart('<b>VOLTA</b>', '<p>', '</p>')
-            .toString()
-            .replace('\r\n', '\n')
-            .split('\n')
-            .map(item => item.trim().replace(/[,.]+$/, ''))
-            .filter(item => item !== ''),
+          [going]: extractPath(data, 'IDA'),
+          [coming]: extractPath(data, 'VOLTA'),
         },
         schedules: [
           ...ways.map(way => [

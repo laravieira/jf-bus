@@ -4,14 +4,9 @@ export enum WorkingDay {
   HOLYDAYS
 }
 
-export enum Way {
-  GOING,
-  COMMING
-}
-
 export type Schedule = {
   day: WorkingDay,
-  way: Way,
+  way: string,
   time: Date,
   accessible: boolean,
   extra?: string
